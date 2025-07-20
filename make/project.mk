@@ -1,13 +1,12 @@
 # Project-specific commands
+# Add your project-specific make targets here
 
-.PHONY: run-pipeline clear-cache generate-summary
+# Example:
+# .PHONY: dev-server
+# dev-server: ## Start development server
+# 	uv run python manage.py runserver
 
-# === Project Commands ===
-run-pipeline: ## Run the complete data pipeline
-	uv run python 01_fetch_data.py && uv run python 02_build_features.py
-
-clear-cache: ## Clear all caches (Redis and pickle files)
-	uv run python clear_cache.py all
-
-generate-summary: ## Generate executive summary
-	uv run python generate_executive_summary.py
+# Example:
+# .PHONY: migrate
+# migrate: ## Run database migrations
+# 	uv run python manage.py migrate

@@ -140,6 +140,11 @@ code-search: ## Fast code search with ripgrep
 		echo "Example: make code-search PATTERN=\"class.*Model\""; \
 		exit 1; \
 	fi; \
+	if echo "$(PATTERN)" | grep -q "[;&|]"; then \
+		echo "❌ Error: Invalid characters in pattern"; \
+		echo "Pattern cannot contain shell metacharacters: ; & |"; \
+		exit 1; \
+	fi; \
 	TYPE_FLAG=""; \
 	if [ -n "$(FILETYPE)" ]; then \
 		TYPE_FLAG="--type $(FILETYPE)"; \

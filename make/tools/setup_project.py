@@ -33,17 +33,32 @@ def print_error(msg):
     print(f"{Colors.RED}✗ {msg}{Colors.END}")
 
 
-def run_command(cmd, description):
+def run_command(cmd, description, critical=True):
     """Run a command and handle errors"""
     print(f"  Running: {cmd}")
-    result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
-    if result.returncode == 0:
-        print_success(description)
-        return True
-    else:
-        print_error(f"{description} failed")
-        if result.stderr:
-            print(f"  Error: {result.stderr}")
+    try:
+        result = subprocess.run(
+            cmd, shell=True, capture_output=True, text=True, timeout=30
+        )
+        if result.returncode == 0:
+            print_success(description)
+            return True
+        else:
+            print_error(f"{description} failed")
+            if result.stderr:
+                print(f"  Error: {result.stderr}")
+            if critical:
+                raise SystemExit(1)
+            return False
+    except subprocess.TimeoutExpired:
+        print_error(f"{description} timed out after 30 seconds")
+        if critical:
+            raise SystemExit(1)
+        return False
+    except Exception as e:
+        print_error(f"{description} failed with error: {str(e)}")
+        if critical:
+            raise SystemExit(1)
         return False
 
 
@@ -103,7 +118,11 @@ def setup_git():
                 ).lower()
                 == "y"
             ):
-                run_command("git remote remove origin", "Removed template remote")
+                run_command(
+                    "git remote remove origin",
+                    "Removed template remote",
+                    critical=False,
+                )
                 print_success("Disconnected from template repository")
                 print_warning("Remember to add your own repository as origin:")
                 print("  git remote add origin <your-repo-url>")
@@ -158,18 +177,19 @@ def install_dependencies():
     """Install Python and Node.js dependencies"""
     print_step("Installing dependencies")
 
-    # Python dependencies
-    if run_command("uv sync", "Python dependencies installed"):
-        pass
+    # Check if uv is installed before attempting to use it
+    if shutil.which("uv"):
+        run_command("uv sync", "Python dependencies installed", critical=False)
     else:
-        print_warning("Failed to install Python dependencies")
+        print_warning("uv not found - skipping Python dependency installation")
+        print("  Install uv from: https://github.com/astral-sh/uv")
 
     # Node.js dependencies
     if Path("package.json").exists():
-        if run_command("npm install", "Node.js dependencies installed"):
-            pass
+        if shutil.which("npm"):
+            run_command("npm install", "Node.js dependencies installed", critical=False)
         else:
-            print_warning("Failed to install Node.js dependencies")
+            print_warning("npm not found - skipping Node.js dependency installation")
 
 
 def setup_mcp_servers():
@@ -178,8 +198,14 @@ def setup_mcp_servers():
 
     mcp_script = Path(__file__).parent / "setup_mcp_servers.py"
     if mcp_script.exists():
-        if run_command(f"uv run python {mcp_script} --auto", "MCP servers configured"):
+        if shutil.which("uv") and run_command(
+            f"uv run python {mcp_script} --auto",
+            "MCP servers configured",
+            critical=False,
+        ):
             print_warning("Restart Claude Code to load the new MCP servers")
+        else:
+            print_warning("MCP server setup skipped - install uv to enable")
     else:
         print_error("MCP setup script not found")
 

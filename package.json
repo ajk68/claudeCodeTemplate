@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "repomix": "latest",
+    "@upstash/context7-mcp": "latest",
+    "server-perplexity-ask": "latest",
+    "@playwright/mcp": "latest"
+  }
+}

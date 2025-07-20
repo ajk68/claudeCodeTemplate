@@ -101,6 +101,8 @@ uv.lock
 # Keep important JSON configs (but not data)
 !*config.json
 !*settings.json
+!package.json
+!package-lock.json
 
 # OS files
 Thumbs.db

@@ -21,22 +21,18 @@ make test-coverage
 
 ### 2. Handle Common Issues
 
-**Numpy/pickle errors?**
-```bash
-# Regenerate data with current environment
-make run-pipeline  # Runs both fetch and build features
-```
-
-**Import errors?**
+**Dependency errors?**
 ```bash
 # Ensure clean environment
 make sync  # or make install-python
 ```
 
-**Cache issues?**
+**Test failures?**
 ```bash
-# Clear all caches
-make clear-cache
+# Run tests with verbose output
+make test
+# Or with coverage
+make test-coverage
 ```
 
 ### 3. Quick Test Writing (Only if Critical)

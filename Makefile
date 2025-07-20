@@ -10,6 +10,7 @@ include make/context.mk
 include make/ai.mk
 include make/project.mk
 include make/database.mk
+include make/logging.mk
 include make/utils.mk
 
 # Default target is defined in help.mk

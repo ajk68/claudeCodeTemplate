@@ -90,6 +90,8 @@ make analyze-file FILE="module.py"                 # Architectural guidance
 make analyze-files FILES="file1.py file2.py"       # Multi-file analysis
 make review-diff                                   # Review changes
 make analyze-logs                                  # Debug from logs
+make dev                                          # Run all processes with logging
+make logs-watch                                   # Watch combined logs real-time
 ```
 
 **Search & Navigation**:
@@ -128,6 +130,22 @@ When: During implementation for specific file inspection/modification
 
 ### Python & Package Management
 Use uv for all package management: `uv add`, `uv sync`, `uv run`. Never use pip or poetry.
+
+### Centralized Logging
+**Important**: All logs should go to the `logs/` directory for unified debugging:
+- Frontend console logs → `logs/frontend/`
+- Backend application logs → `logs/backend/`
+- Combined process output → `logs/combined/`
+
+**Commands**:
+```bash
+make dev              # Start all services with centralized logging
+make logs-watch       # Watch combined logs in real-time
+make logs-analyze     # AI analysis of recent logs
+make logs-tail FILE=frontend  # Tail specific log file
+```
+
+**Setup**: Uses shoreman.sh (from mitsuhiko/minibb, located in make/tools/) for process management and vite-console-forward-plugin for frontend log capture. Inspired by mitsuhiko's workflows and many others in the community.
 
 ## Project Specific Instructions
 

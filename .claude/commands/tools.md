@@ -50,11 +50,10 @@ make format                # Format code
 
 ### 🚀 Project Operations
 ```bash
-make run-pipeline          # Run data pipeline
-make clear-cache          # Clear all caches
 make install              # Install dependencies
 make sync                # Update dependencies
 make clean               # Clean generated files
+make dev                 # Start development processes
 ```
 
 ## Direct Tool Access

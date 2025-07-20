@@ -1,0 +1,27 @@
+# Example Procfile for development with centralized logging
+# Copy to Procfile and customize for your project
+
+# Python/Django example
+# web: uv run python manage.py runserver 8000
+# worker: uv run celery -A myproject worker --loglevel=info
+# scheduler: uv run celery -A myproject beat --loglevel=info
+
+# Node.js example
+# api: cd backend && npm run dev
+# frontend: cd frontend && npm run dev
+# worker: cd backend && npm run worker
+
+# FastAPI example
+# api: uv run uvicorn main:app --reload --port 8000
+# worker: uv run python worker.py
+
+# Generic services
+# redis: redis-server
+# postgres: postgres -D /usr/local/var/postgres
+
+# Docker services
+# db: docker-compose up postgres
+# cache: docker-compose up redis
+
+# Log watchers (if needed)
+# logs: tail -f logs/combined/*.log

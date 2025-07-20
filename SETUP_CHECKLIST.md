@@ -14,40 +14,23 @@ make setup
 ## 📋 Manual Setup Checklist
 
 ### 1. Prerequisites
-- [ ] Install [uv](https://github.com/astral-sh/uv) for Python package management
-- [ ] Install Node.js and npm
-- [ ] Install [ripgrep](https://github.com/BurntSushi/ripgrep) (`rg`)
-- [ ] Install [Claude Code](https://claude.ai/code) CLI
-- [ ] Install Git
+- [ ] Install [uv](https://github.com/astral-sh/uv) for Python package management with `curl -LsSf https://astral.sh/uv/install.sh | sh`
+- [ ] Install Node.js and npm with  with `brew install node`
+- [ ] Install [ripgrep](https://github.com/BurntSushi/ripgrep) (`rg`) with `brew install ripgrep`
+- [ ] Install [Claude Code](https://claude.ai/code) CLI with `npm install -g @anthropic-ai/claude-code`
+- [ ] Install Git with `brew install git`
 
 ### 2. Environment Configuration
 - [ ] Copy `.env-example` to `.env` (or let setup create it)
-- [ ] Add your API keys to `.env`:
-  - [ ] `PERPLEXITY_API_KEY` - For web search via MCP
-  - [ ] `ANTHROPIC_API_KEY` - For AI delegation commands
-  - [ ] `OPENAI_API_KEY` - Optional, for GPT models
-  - [ ] `GOOGLE_API_KEY` / `LLM_GEMINI_KEY` - For Gemini models
-  - [ ] `GH_TOKEN` - For GitHub operations
+- [ ] Add your API keys to `.env` (see `.env-example` for details)
 
 ### 3. Project Personalization
-- [ ] Update `pyproject.toml`:
-  - [ ] Change `name` from "claude-dev-template"
-  - [ ] Update `description`
-  - [ ] Add project-specific dependencies
-- [ ] Update `CLAUDE.md`:
-  - [ ] Fill in "Project Specific Instructions" section
-  - [ ] Add project overview (tech stack, components)
-  - [ ] Document architecture decisions
-  - [ ] Add development workflow notes
-- [ ] Update repository settings:
-  - [ ] Change git remote URL to your repository
-  - [ ] Update LICENSE if needed
+- [ ] Update `pyproject.toml`: change `name` and `description`
+- [ ] Update `CLAUDE.md`: fill in the project-specific placeholders
+- [ ] Update git remote URL to your repository
 
-### 4. MCP Server Setup
-- [ ] Run `make setup-mcp` to see MCP commands
-- [ ] Or run `make setup-mcp-auto` to configure automatically
-- [ ] Restart Claude Code after MCP setup
-- [ ] Verify MCP servers with `/mcp` command
+### 4. Setup
+- [ ] Run `make setup` to configure MCP servers and verify setup
 
 ### 5. Optional Enhancements
 - [ ] Add project-specific slash commands in `.claude/commands/`

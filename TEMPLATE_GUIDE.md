@@ -26,6 +26,11 @@ A battle-tested template for AI-assisted development that transforms Claude from
 - **Solution**: Purpose-built commands for each development phase
 - **Result**: Clear progression from idea → planning → implementation → shipping
 
+### 📊 Centralized Logging & Debugging
+- **Problem**: Scattered logs across terminals, browser consoles, and files make debugging hard
+- **Solution**: Unified logging system that combines all sources with AI analysis
+- **Result**: Single source of truth for debugging with AI-powered log analysis
+
 ## Quick Start
 
 ### Method 1: GitHub Template (Recommended)
@@ -75,8 +80,16 @@ A battle-tested template for AI-assisted development that transforms Claude from
 make/
 ├── ai.mk           # AI delegation commands
 ├── context.mk      # Context generation commands
+├── logging.mk      # Centralized logging commands
 ├── quality.mk      # Testing and linting
 └── tools/          # Development utilities
+    └── shoreman.sh # Process manager (from mitsuhiko/minibb)
+
+logs/
+├── frontend/       # Browser console logs
+├── backend/        # Server application logs
+└── combined/       # Unified process output
+
 
 ~/.claude/          # User-level configuration (not in template)
 ├── hooks/          # Personal automation scripts
@@ -98,6 +111,8 @@ make/
 
 **Development**:
 - `make project-status` - Current state summary
+- `make dev` - Run all services with unified logging
+- `make logs-watch` - Watch combined logs in real-time
 - `make analyze-logs` - AI-powered log analysis
 - `make review-diff` - Review pending changes
 
@@ -144,12 +159,38 @@ make/
 
 ## Customization Guide
 
+### Setting Up Centralized Logging
+1. **Configure your Procfile** - Copy `Procfile.example` to `Procfile` and list your services
+2. **Frontend setup** - The template includes vite-console-forward-plugin pre-configured
+3. **Run services** - Use `make dev` to start all processes with unified logging
+4. **Monitor logs** - Use `make logs-watch` for real-time monitoring
+
+**Attribution**: Process management via shoreman.sh (in make/tools/) from mitsuhiko/minibb, inspired by mitsuhiko's workflows and many others.
+
 ### Adding Project Commands
+
+#### Slash Commands
 Create markdown files in `.claude/commands/`:
 ```bash
 echo "Your custom prompt here" > .claude/commands/my-command.md
 # Use as: /my-command
 ```
+
+#### Make Commands
+Add project-specific make targets to `make/project.mk`:
+```makefile
+# Example: Development server
+.PHONY: dev-server
+dev-server: ## Start development server
+	uv run python manage.py runserver
+
+# Example: Database migrations
+.PHONY: migrate
+migrate: ## Run database migrations
+	uv run python manage.py migrate
+```
+
+The template's `make/project.mk` file is intentionally empty - it's where you add commands specific to your project without modifying the core template files.
 
 ### Setting Up Hooks
 Configure in `.claude/settings.json`:

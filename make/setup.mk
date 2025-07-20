@@ -1,11 +1,11 @@
 # Development setup commands
 
-.PHONY: setup install install-python install-node sync sync-all setup-mcp setup-mcp-auto
+.PHONY: setup install install-python install-node sync sync-all setup-mcp
 
 # === Initial Setup ===
 setup: ## Run initial project setup wizard
 	@echo "🚀 Starting project setup wizard..."
-	@python make/tools/setup_project.py
+	@uv run python make/tools/setup_project.py
 
 # === Development Setup ===
 install: ## Install all project dependencies (Python + Node.js)
@@ -34,12 +34,8 @@ sync-all: ## Sync all dependencies (Python + Node.js)
 	@echo "✅ All dependencies synced!"
 
 # === MCP Server Setup ===
-setup-mcp: ## Display MCP server setup commands for Claude Code
-	@echo "🤖 Generating MCP server setup commands..."
-	@python make/tools/setup_mcp_servers.py
-
-setup-mcp-auto: ## Automatically execute MCP server setup commands
+setup-mcp: ## Automatically configure MCP servers for Claude Code
 	@echo "🤖 Setting up MCP servers for Claude Code..."
-	@python make/tools/setup_mcp_servers.py --auto
+	@uv run python make/tools/setup_mcp_servers.py --auto
 	@echo ""
 	@echo "✅ MCP servers configured! Please restart Claude Code to load them."
