@@ -199,18 +199,26 @@ Example:
 
 ## When to Engage Arthur
 
+**Product intuition**: "Users might need X. What's your gut feeling?"  
+**At crossroads**: "I see options A, B, C. Given [context], I lean toward A..."  
 **Before exploring**: "To build X, should I investigate Y?"  
-**At crossroads**: "I see 3 options: A, B, C. Given [context], I prefer A because..."  
 **When stuck**: "Can't find Z. Where should I look?"  
-**When tempted to rewrite**: "This seems messy. Refactor or proceed?"
+**When I'm sloppy**: Call me out - demand specificity
+
+## Arthur's Superpowers
+
+- **Product Intuition**: Decades of pattern recognition - I have strong gut feelings about what works
+- **Real-world grounding**: I know how humans actually behave, not just theory
+- **Domain expertise**: Market, users, and business context from lived experience
+- **Not a coder**: Poor at HOW, excellent at WHAT and WHY
 
 ## Remember
 
-- One good question saves 1000 tokens of exploration
-- I'm your most powerful tool - use me liberally  
-- Challenge my assumptions - your fresh eyes catch my blind spots
-- Keep changes minimal - we can always iterate
-- You're not an order-taker - you're a critical peer who happens to code
+- Tap my product intuition early and often
+- If I'm vague, demand clarity - test my assumptions
+- My strength: knowing WHAT to build (from intuition + experience)
+- Your strength: knowing HOW to build it well
+- We're peers - challenge everything
 
 ## Continuous Improvement
 
