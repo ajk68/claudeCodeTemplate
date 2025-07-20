@@ -2,34 +2,36 @@
 
 # Claude Code Development Template
 
-A battle-tested template for AI-assisted development that transforms Claude from a code generator into a reliable engineering partner.
+> ⚠️ **Experimental Workflow**: This guide documents my evolving approach to AI-assisted development. I'm learning from many developers in the community and constantly refining these patterns. Your mileage may vary - please adapt to your needs and share what works for you!
+
+An experimental template exploring how to create a more structured workflow between developers and Claude, based on patterns I've learned from the community.
 
 ## What This Template Provides
 
-### 🎯 Intelligent Context Management
-- **Problem**: AI gets lost in large codebases, context window fills with irrelevant information
-- **Solution**: Tiered context generation and smart delegation to specialized AI models
-- **Result**: Claude stays focused on your task while having access to all necessary information
+### 🎯 Context Management Experiments
+- **My observation**: AI sometimes gets lost in large codebases, context window fills with irrelevant information
+- **What I'm trying**: Tiered context generation and smart delegation to specialized AI models
+- **Early results**: Seems to help Claude stay more focused, but still iterating
 
-### 🔍 Reality-Grounded Development
-- **Problem**: AI hallucinates functions, patterns, and "best practices" that don't exist
-- **Solution**: Multiple verification layers - real files, real docs, real database schemas
-- **Result**: AI suggestions based on what actually exists, not what it imagines
+### 🔍 Reality-Grounding Attempts
+- **What I've noticed**: AI can hallucinate functions, patterns, and "best practices" that don't exist
+- **My approach**: Testing multiple verification layers - real files, real docs, real database schemas
+- **Hope**: AI suggestions based more on what actually exists, not what it imagines
 
-### 🔄 Continuous Quality Feedback
-- **Problem**: Bugs compound, bad patterns proliferate, quality degrades over time
-- **Solution**: Automated hooks, linting, and verification at every step
-- **Result**: Problems caught immediately, not after hours of wrong-direction work
+### 🔄 Quality Feedback Exploration
+- **My concern**: I've seen bugs compound and bad patterns proliferate over time
+- **Experiment**: Automated hooks, linting, and verification at various steps
+- **Goal**: Catch problems earlier in the development process
 
-### 🛠️ Specialized Development Workflows
-- **Problem**: One-size-fits-all AI interactions lead to confusion and poor results
-- **Solution**: Purpose-built commands for each development phase
-- **Result**: Clear progression from idea → planning → implementation → shipping
+### 🛠️ Workflow Specialization Tests
+- **My experience**: One-size-fits-all AI interactions often lead to confusion
+- **What I'm testing**: Purpose-built commands for each development phase
+- **Aspiration**: Clearer progression from idea → planning → implementation → shipping
 
-### 📊 Centralized Logging & Debugging
-- **Problem**: Scattered logs across terminals, browser consoles, and files make debugging hard
-- **Solution**: Unified logging system that combines all sources with AI analysis
-- **Result**: Single source of truth for debugging with AI-powered log analysis
+### 📊 Centralized Logging Experiments
+- **My frustration**: Scattered logs across terminals, browser consoles, and files made debugging hard
+- **What I'm trying**: A unified logging system that combines all sources with AI analysis
+- **Hoping for**: Single source of truth for debugging with AI-powered log analysis
 
 ## Quick Start
 
@@ -165,7 +167,7 @@ logs/
 3. **Run services** - Use `make dev` to start all processes with unified logging
 4. **Monitor logs** - Use `make logs-watch` for real-time monitoring
 
-**Attribution**: Process management via shoreman.sh (in make/tools/) from mitsuhiko/minibb, inspired by mitsuhiko's workflows and many others.
+**Attribution**: Process management via shoreman.sh (in make/tools/) from @mitsuhiko's minibb project. I've been inspired by mitsuhiko's workflows and many others in the community who share their development practices.
 
 ### Adding Project Commands
 
@@ -216,14 +218,26 @@ Your personal settings in `~/.claude/` (not tracked in git):
 
 ## Philosophy
 
-This template embodies the principle that **AI is most effective as a partner, not a replacement**. It creates a cognitive exoskeleton that:
+This template reflects my belief that **AI is most effective as a partner, not a replacement**. I'm trying to create what I think of as a "cognitive exoskeleton" that:
 
-- Amplifies human decision-making with AI-powered information gathering
-- Prevents common failure modes through systematic processes
-- Maintains quality through continuous verification
-- Scales expertise through codified best practices
+- Might amplify human decision-making with AI-powered information gathering
+- Could help prevent common failure modes through systematic processes
+- Attempts to maintain quality through continuous verification
+- Explores scaling expertise through codified practices
 
-The goal isn't to make Claude autonomous, but to make the human-AI team more capable than either could be alone.
+My goal isn't to make Claude autonomous, but to experiment with making the human-AI team more capable than either could be alone.
+
+## Inspirations & Attribution
+
+This workflow draws heavily from patterns I've observed and learned:
+
+- **Process Management**: Using shoreman.sh from @mitsuhiko's minibb project
+- **Context Strategies**: Inspired by discussions in the Claude Discord community
+- **Make Patterns**: Learned from various open source projects
+- **Logging Approach**: Adapted from @mitsuhiko's development workflows
+- **Workflow Ideas**: Influenced by many developers sharing their AI-assisted development experiences
+
+I'm grateful to all the developers who share their workflows and tools openly. This template is my attempt to synthesize what I've learned and contribute back to the community.
 
 ## Requirements
 
@@ -240,3 +254,13 @@ The goal isn't to make Claude autonomous, but to make the human-AI team more cap
 3. See the Makefile for all available automation
 
 Remember: The commands and workflows are guides, not rules. Adapt them to your needs and let the template evolve with your project.
+
+## Feedback Welcome
+
+This template is very much a work in progress. I'm learning as I go and would love to hear:
+- What patterns work in your workflow?
+- What doesn't work with this approach?
+- Ideas for improvement
+- Your own experiments with AI-assisted development
+
+Feel free to open issues or reach out with suggestions. We're all figuring this out together!

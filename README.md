@@ -1,34 +1,59 @@
 # Claude Code Development Template
 
-> Transform Claude from a code generator into a reliable engineering partner
+> ⚠️ **Experimental Setup**: This template reflects my evolving workflow, inspired by patterns I've learned from the developer community. Use at your own risk and please share your suggestions!
 
-A battle-tested template for AI-assisted development that creates a cognitive exoskeleton around Claude, amplifying human decision-making while preventing common AI failure modes.
+> My attempt at creating a more structured workflow with Claude, learning from community best practices
+
+An experimental template exploring how to create a more structured workflow between developers and Claude, based on patterns I've learned from the community. This is my attempt at building a "cognitive exoskeleton" that might help amplify human decision-making while reducing common AI pitfalls.
+
+## 🧪 About This Experimental Setup
+
+This template is my personal experiment in AI-assisted development, heavily inspired by:
+- Process management patterns from @mitsuhiko's minibb
+- Context management strategies shared in the Claude community
+- Workflow automation ideas from various open source projects
+
+I'm continuously learning and iterating on these patterns. What works for me might not work for you - please adapt freely!
 
 ## 🚀 Quick Start
 
+### Create a New Project
+
 ```bash
-# 1. Use this template to create your repository
-# 2. Clone and setup
-git clone <your-repo-url>
-cd <your-repo>
-make install
+# One-line setup - downloads and runs bootstrap script
+curl -sSL https://raw.githubusercontent.com/YOUR_USERNAME/claudeCodeTemplate/main/bootstrap.py | python3 - my-project
 
-# 3. Start Claude Code
-claude
-
-# 4. Try a workflow command
-/status    # See project state without context pollution
+# Or if you prefer to review the script first:
+wget https://raw.githubusercontent.com/YOUR_USERNAME/claudeCodeTemplate/main/bootstrap.py
+python3 bootstrap.py my-project
 ```
 
-## 🎯 Why This Template?
+This will:
+1. Clone the template to a new directory
+2. Remove template git history
+3. Initialize fresh git repository
+4. Run setup to configure your environment
+5. Your project is ready to go!
 
-**Problem**: AI assistants get lost in large codebases, hallucinate functions that don't exist, and compound errors over time.
+### Start Development
 
-**Solution**: This template provides:
-- **Intelligent Context Management** - Tiered context generation keeps Claude focused
-- **Reality-Grounded Development** - Multiple verification layers prevent hallucination
-- **Continuous Quality Feedback** - Automated checks catch problems immediately
-- **Specialized Workflows** - Purpose-built commands for each development phase
+```bash
+cd my-project
+claude              # Start Claude Code
+
+# Try a workflow command
+/status            # See project state without context pollution
+```
+
+## 🎯 Why I Created This Template
+
+**What I noticed**: When working with AI assistants on larger codebases, I found they would often get lost, suggest functions that don't exist, or compound errors over time.
+
+**What I'm trying**: This template experiments with:
+- **Context Management** - Attempting to keep Claude focused through tiered context generation
+- **Reality Grounding** - Testing multiple verification layers to reduce hallucination
+- **Quality Feedback** - Exploring automated checks to catch issues early
+- **Workflow Specialization** - Experimenting with purpose-built commands for different tasks
 
 ## 📖 Documentation
 
@@ -82,9 +107,28 @@ make/             # Modular Make automation
 - ripgrep (`rg`)
 - Git
 
-## 🤝 Contributing
+## 🤝 Contributing & Feedback
 
-This template evolves through practice. When you discover patterns that work (or don't), consider contributing them back to help others.
+This template evolves through practice and community input. I'm learning as I go and would love to hear:
+- What patterns work in your workflow?
+- What doesn't work with this approach?
+- Ideas for improvement
+
+When you discover patterns that work (or don't), please share them! We're all figuring this out together.
+
+## 🔧 Developing the Template
+
+If you want to contribute to or customize the template itself:
+
+```bash
+# Clone the template repository directly
+git clone https://github.com/YOUR_USERNAME/claudeCodeTemplate.git
+cd claudeCodeTemplate
+make install
+
+# Make your changes, test, commit, push
+# The bootstrap.py script ensures users won't accidentally modify the template
+```
 
 ## 📄 License
 
