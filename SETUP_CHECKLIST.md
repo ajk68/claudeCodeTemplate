@@ -8,10 +8,10 @@ This checklist helps you set up a new project from the Claude Code template, bas
 
 ```bash
 # One-line project creation
-curl -sSL https://raw.githubusercontent.com/YOUR_USERNAME/claudeCodeTemplate/main/bootstrap.py | python3 - my-project
+curl -sSL https://raw.githubusercontent.com/ajk68/claudeCodeTemplate/main/bootstrap.py | python3 - my-project
 
 # Or download and run
-wget https://raw.githubusercontent.com/YOUR_USERNAME/claudeCodeTemplate/main/bootstrap.py
+wget https://raw.githubusercontent.com/ajk68/claudeCodeTemplate/main/bootstrap.py
 python3 bootstrap.py my-project
 ```
 
@@ -82,7 +82,7 @@ If you're working on the template itself (not creating a new project):
 
 ```bash
 # Clone the template repository directly
-git clone https://github.com/YOUR_USERNAME/claudeCodeTemplate.git
+git clone https://github.com/ajk68/claudeCodeTemplate.git
 cd claudeCodeTemplate
 make install
 ```

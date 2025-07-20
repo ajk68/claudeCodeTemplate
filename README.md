@@ -21,10 +21,10 @@ I'm continuously learning and iterating on these patterns. What works for me mig
 
 ```bash
 # One-line setup - downloads and runs bootstrap script
-curl -sSL https://raw.githubusercontent.com/YOUR_USERNAME/claudeCodeTemplate/main/bootstrap.py | python3 - my-project
+curl -sSL https://raw.githubusercontent.com/ajk68/claudeCodeTemplate/main/bootstrap.py | python3 - my-project
 
 # Or if you prefer to review the script first:
-wget https://raw.githubusercontent.com/YOUR_USERNAME/claudeCodeTemplate/main/bootstrap.py
+wget https://raw.githubusercontent.com/ajk68/claudeCodeTemplate/main/bootstrap.py
 python3 bootstrap.py my-project
 ```
 
@@ -122,7 +122,7 @@ If you want to contribute to or customize the template itself:
 
 ```bash
 # Clone the template repository directly
-git clone https://github.com/YOUR_USERNAME/claudeCodeTemplate.git
+git clone https://github.com/ajk68/claudeCodeTemplate.git
 cd claudeCodeTemplate
 make install
 

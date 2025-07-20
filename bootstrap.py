@@ -114,7 +114,7 @@ def main():
     parser.add_argument("project_name", help="Name for your new project directory")
     parser.add_argument(
         "--repo",
-        default="https://github.com/YOUR_USERNAME/claudeCodeTemplate.git",
+        default="https://github.com/ajk68/claudeCodeTemplate.git",
         help="Template repository URL",
     )
     parser.add_argument(
