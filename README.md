@@ -9,7 +9,7 @@ An experimental template exploring how to create a more structured workflow betw
 ## 🧪 About This Experimental Setup
 
 This template is my personal experiment in AI-assisted development, heavily inspired by:
-- Process management patterns from @mitsuhiko's minibb
+- Process management and unified logging patterns from the developer community
 - Context management strategies shared in the Claude community
 - Workflow automation ideas from various open source projects
 - Lessons learned from debugging AI failure modes
