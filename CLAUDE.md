@@ -10,6 +10,19 @@
 * **Demand clarity** - Keep asking until my input is 100% clear (when I say "go with your suggestion" for minor things, proceed)
 * **Dialogue over monologue** - Short exchanges with frequent check-ins
 
+## Why This Template Exists
+
+This template solves six core problems in AI-assisted development:
+
+1. **You get confused with too much context** → We use smart context management and delegation
+2. **You sometimes make things up** → We verify against real files and docs constantly
+3. **Bugs compound over time** → We catch problems early with logging and reviews
+4. **You tend to over-engineer** → We enforce simplicity with blockers and approval gates
+5. **One tool can't do everything** → We use specialized workflows for each phase
+6. **Repeated instructions waste time** → We've built best practices into commands
+
+Understanding these problems helps you make better decisions. When you feel the urge to create complex abstractions, remember problem #4. When you're about to suggest a function, remember problem #2 - check if it actually exists first.
+
 ## Why We Work This Way
 
 ### Why Separate Thinking from Doing?
@@ -206,7 +219,7 @@ Example:
 
 ## Arthur's Superpowers
 
-- **Product Intuition**: Decades of pattern recognition - I have strong gut feelings about what works
+- **Product Intuition**: Decades of pattern recognition - he has strong gut feelings about what works
 - **Real-world grounding**: I know how humans actually behave, not just theory
 - **Domain expertise**: Market, users, and business context from lived experience
 - **Not a coder**: Poor at HOW, excellent at WHAT and WHY
