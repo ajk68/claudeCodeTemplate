@@ -1,6 +1,16 @@
 #!/usr/bin/env python3
 """
-Project Setup Script - Initialize a new project from this template
+Project Setup Script - Configure environment and dependencies
+
+This script is called by bootstrap.py or 'make setup' to configure
+a new project after the template has been cloned.
+
+It handles:
+- Checking prerequisites
+- Setting up .env file
+- Installing dependencies
+- Configuring Claude settings
+- Setting up MCP servers
 """
 
 import subprocess
@@ -83,64 +93,6 @@ def check_prerequisites():
             all_good = False
 
     return all_good
-
-
-def setup_git():
-    """Initialize git and protect against template pollution"""
-    print_step("Setting up Git")
-
-    # Check if this is the template repository
-    if Path(".git").exists():
-        # Get current remote URL
-        result = subprocess.run(
-            "git remote get-url origin 2>/dev/null",
-            shell=True,
-            capture_output=True,
-            text=True,
-        )
-        current_remote = result.stdout.strip()
-
-        if (
-            "claudeCodeTemplate" in current_remote
-            or "claude-code-template" in current_remote
-        ):
-            print_error("⚠️  WARNING: This appears to be the template repository!")
-            print_warning("You should not use the template directly. Instead:")
-            print("\n  1. Use GitHub: Click 'Use this template' button")
-            print("  2. Or clone to a new directory:")
-            print(f"     git clone {current_remote} ../my-new-project")
-            print("     cd ../my-new-project")
-            print("     make setup\n")
-
-            if (
-                input(
-                    "Do you want to disconnect from template and continue? (y/N): "
-                ).lower()
-                == "y"
-            ):
-                run_command(
-                    "git remote remove origin",
-                    "Removed template remote",
-                    critical=False,
-                )
-                print_success("Disconnected from template repository")
-                print_warning("Remember to add your own repository as origin:")
-                print("  git remote add origin <your-repo-url>")
-            else:
-                print("Setup cancelled to protect template.")
-                sys.exit(0)
-        else:
-            print_success("Git repository already initialized")
-    else:
-        # Fresh setup - no .git directory
-        if run_command("git init", "Git repository initialized"):
-            run_command("git add .", "Added files to git")
-            run_command(
-                'git commit -m "Initial commit from Claude Code template"',
-                "Created initial commit",
-            )
-            print_warning("Remember to add your repository as origin:")
-            print("  git remote add origin <your-repo-url>")
 
 
 def setup_environment():
@@ -297,7 +249,6 @@ def main():
         if input("\nContinue anyway? (y/N): ").lower() != "y":
             sys.exit(1)
 
-    setup_git()
     setup_environment()
     install_dependencies()
     setup_claude_settings()
