@@ -56,10 +56,10 @@ Smart delegation based on size:
 
 Multiple verification layers prevent hallucination:
 
-- **repoprompt** - Read actual files, not from memory
-- **Context7** - Get real documentation  
-- **make db-schema** - Check actual database structure
-- **Perplexity** - Research current best practices
+- **repoprompt MCP Server** - Read actual files, not from memory. You have to download from repoprompt.com (paid, but nice!)
+- **Context7** - Get real documentation. Automatically installed. 
+- **make db-schema** - Check actual database structure. Uses `psql` . please change Makefile in `/make/tools/database.mk` to change
+- **Perplexity MCP Server** - Research current best practices. Will be automatically installed, but requires API key in .env
 
 ### 3. Workflow Commands
 

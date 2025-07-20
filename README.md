@@ -8,7 +8,7 @@ A template for structured AI-assisted development with Claude. It helps prevent 
 # Create new project from template
 curl -sSL https://raw.githubusercontent.com/ajk68/claudeCodeTemplate/main/bootstrap.py | python3 - my-project
 cd my-project
-claude
+claude code
 ```
 
 That's it. The bootstrap script handles everything.
