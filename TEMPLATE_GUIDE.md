@@ -1,201 +1,177 @@
-# TEMPLATE_GUIDE.md
+# Template Guide
 
-# Claude Code Development Template
+Complete reference for the Claude Code Development Template.
 
-> ⚠️ **Experimental Workflow**: This guide documents my evolving approach to AI-assisted development. I'm learning from many developers in the community and constantly refining these patterns. Your mileage may vary - please adapt to your needs and share what works for you!
+## Overview
 
-An experimental template exploring how to create a more structured workflow between developers and Claude, based on patterns I've learned from the community.
+This template creates a structured workflow between developers and Claude. It addresses common problems in AI-assisted development:
 
-## What This Template Provides
+- **Context pollution** - AI loses focus in large codebases
+- **Hallucination** - AI invents functions or patterns that don't exist  
+- **Error propagation** - Bugs compound over time
+- **Over-engineering** - AI adds unnecessary complexity
 
-### 🎯 Context Management Experiments
-- **My observation**: AI sometimes gets lost in large codebases, context window fills with irrelevant information
-- **What I'm trying**: Tiered context generation and smart delegation to specialized AI models
-- **Early results**: Seems to help Claude stay more focused, but still iterating
+## Architecture
 
-### 🔍 Reality-Grounding Attempts
-- **What I've noticed**: AI can hallucinate functions, patterns, and "best practices" that don't exist
-- **My approach**: Testing multiple verification layers - real files, real docs, real database schemas
-- **Hope**: AI suggestions based more on what actually exists, not what it imagines
+### Directory Structure
 
-### 🔄 Quality Feedback Exploration
-- **My concern**: I've seen bugs compound and bad patterns proliferate over time
-- **Experiment**: Automated hooks, linting, and verification at various steps
-- **Goal**: Catch problems earlier in the development process
-
-### 🛠️ Workflow Specialization Tests
-- **My experience**: One-size-fits-all AI interactions often lead to confusion
-- **What I'm testing**: Purpose-built commands for each development phase
-- **Aspiration**: Clearer progression from idea → planning → implementation → shipping
-
-### 📊 Centralized Logging Experiments
-- **My frustration**: Scattered logs across terminals, browser consoles, and files made debugging hard
-- **What I'm trying**: A unified logging system that combines all sources with AI analysis
-- **Hoping for**: Single source of truth for debugging with AI-powered log analysis
-
-## Quick Start
-
-### Method 1: GitHub Template (Recommended)
-1. **Click "Use this template"** button on GitHub
-2. **Clone your new repository**:
-   ```bash
-   git clone <your-new-repo-url> my-project
-   cd my-project
-   ```
-3. **Run the setup wizard**:
-   ```bash
-   make setup   # Runs interactive setup
-   ```
-
-### Method 2: Manual Clone
-1. **Clone the template**:
-   ```bash
-   git clone https://github.com/ajk68/claudeCodeTemplate my-project
-   cd my-project
-   ```
-2. **Run setup** (will detect and protect template):
-   ```bash
-   make setup   # Will disconnect from template repo
-   ```
-
-### After Setup
-1. **Start Claude Code**:
-   ```bash
-   claude
-   ```
-2. **Try a workflow command**:
-   ```
-   /status              # See current project state
-   /brainstorm          # Start exploring an idea
-   /implement           # Execute code changes
-   ```
-
-## Key Components
-
-### 📁 Directory Structure
 ```
 .claude/
-├── commands/        # Slash commands for Claude workflows
-├── hooks/           # Local project hooks (optional)
-└── settings.json    # Project-specific Claude settings
+├── commands/        # Workflow prompts (/brainstorm, /implement, etc.)
+├── hooks/           # Automation scripts (formatting, blocking bad patterns)
+└── settings.json    # Project Claude configuration
 
 make/
 ├── ai.mk           # AI delegation commands
-├── context.mk      # Context generation commands
-├── logging.mk      # Centralized logging commands
+├── context.mk      # Context generation  
+├── logging.mk      # Centralized logging
 ├── quality.mk      # Testing and linting
-└── tools/          # Development utilities
-    └── shoreman.sh # Process manager (from mitsuhiko/minibb)
+└── tools/          # Utilities (shoreman.sh process manager)
 
 logs/
 ├── frontend/       # Browser console logs
-├── backend/        # Server application logs
-└── combined/       # Unified process output
-
-
-~/.claude/          # User-level configuration (not in template)
-├── hooks/          # Personal automation scripts
-└── settings.json   # Personal Claude settings
+├── backend/        # Server logs
+└── combined/       # Unified output
 ```
 
-### 🔧 Make Commands
+## Core Concepts
 
-**Context & Analysis**:
-- `make generate-context-python` - Python files only (~40K tokens)
-- `make generate-context-small` - Compressed overview (~60K tokens)
-- `make ai-analyze-project` - Full project analysis with AI
-- `make code-search` - Fast pattern searching
+### 1. Context Management
 
-**Quality & Testing**:
-- `make test` - Run test suite
-- `make lint` - Check code quality
-- `make format` - Auto-format code
+The template uses tiered context generation to keep Claude focused:
 
-**Development**:
-- `make project-status` - Current state summary
-- `make dev` - Run all services with unified logging
-- `make logs-watch` - Watch combined logs in real-time
-- `make analyze-logs` - AI-powered log analysis
-- `make review-diff` - Review pending changes
-
-### 💬 Workflow Commands
-
-**Strategic Planning**:
-- `/brainstorm` - Explore ideas with data-driven insights
-- `/architect` - Create technical implementation plans
-
-**Execution**:
-- `/implement` - Write code (handles both features and fixes)
-- `/test` - Verify functionality
-- `/ship` - Finalize and commit changes
-
-**Support**:
-- `/status` - Quick orientation without context pollution
-- `/review` - Get peer-review style feedback
-- `/document` - Update documentation to match reality
-
-## Core Principles
-
-### 1. Context Preservation
-- Main Claude instance stays focused on the task
-- Information gathering delegated to specialized agents
-- Smart model selection based on content size
-
-### 2. Reality Anchoring
-- Always read actual files, never rely on memory
-- Check real documentation via Context7
-- Verify against actual database schemas
-- Research current practices via Perplexity
-
-### 3. Continuous Verification
-- Automated formatting and linting after edits
-- Test execution at multiple checkpoints
-- Smart blockers prevent common mistakes
-- Human approval required for major decisions
-
-### 4. Pragmatic Constraints
-- Prefer modifying existing code over creating new files
-- No abstractions without 3+ existing uses
-- No mocks or fixtures - real data only
-- Clear decision points, no implicit assumptions
-
-## Customization Guide
-
-### Setting Up Centralized Logging
-1. **Configure your Procfile** - Copy `Procfile.example` to `Procfile` and list your services
-2. **Frontend setup** - The template includes vite-console-forward-plugin pre-configured
-3. **Run services** - Use `make dev` to start all processes with unified logging
-4. **Monitor logs** - Use `make logs-watch` for real-time monitoring
-
-**Attribution**: Process management via shoreman.sh (in make/tools/) from @mitsuhiko's minibb project. I've been inspired by mitsuhiko's workflows and many others in the community who share their development practices.
-
-### Adding Project Commands
-
-#### Slash Commands
-Create markdown files in `.claude/commands/`:
 ```bash
-echo "Your custom prompt here" > .claude/commands/my-command.md
+make generate-context-python    # Python only (~40K tokens)
+make generate-context-small     # Compressed overview (~60K tokens)  
+make generate-context-code      # Code without docs/tests (~70K tokens)
+make generate-context-full      # Everything (~145K tokens)
+```
+
+Smart delegation based on size:
+- Small files (<70KB) → Claude
+- Large files (>70KB) → Gemini
+- Codebase analysis → Delegated to fresh instance
+
+### 2. Reality Grounding
+
+Multiple verification layers prevent hallucination:
+
+- **repoprompt** - Read actual files, not from memory
+- **Context7** - Get real documentation  
+- **make db-schema** - Check actual database structure
+- **Perplexity** - Research current best practices
+
+### 3. Workflow Commands
+
+Each development phase has specialized commands:
+
+#### Planning Phase
+- `/brainstorm` - Explore with data-driven insights
+- `/prd` - Create product requirements document
+- `/architect` - Minimal technical implementation plan
+
+#### Execution Phase  
+- `/implement` - Execute changes with focused context
+- `/test` - Verify functionality
+- `/refactor` - Propose high-ROI improvements
+
+#### Review Phase
+- `/review` - Peer-style consultative feedback
+- `/ship` - Final quality checks and commit
+- `/document` - Update docs to match reality
+
+### 4. Quality Automation
+
+Hooks run automatically after edits:
+- Python formatting with ruff
+- Linting and error checking
+- Smart blockers (prevent `_v2.py` files, enforce `uv` over `pip`)
+
+Manual quality commands:
+```bash
+make test           # Run test suite
+make lint           # Check issues
+make format         # Fix formatting
+make review-diff    # AI review of changes
+```
+
+### 5. Centralized Logging
+
+All services log to one place:
+
+```bash
+make dev           # Start with unified logging
+make logs-watch    # Real-time monitoring
+make logs-analyze  # AI pattern analysis
+```
+
+Uses shoreman.sh (from mitsuhiko/minibb) for process management.
+
+## Command Reference
+
+### Make Commands
+
+**Context Generation**
+- `generate-context-full` - Complete codebase
+- `generate-context-code` - Code only
+- `generate-context-python` - Python files
+- `generate-context-small` - Compressed
+- `generate-context-from-files FILES="..."` - Specific files
+
+**AI Analysis**
+- `ai-query PROMPT="..." [FILE=...]` - Smart model selection
+- `ai-analyze-project PROMPT="..." SCOPE=...` - Full analysis
+- `analyze-file FILE="..."` - Single file review
+- `review-diff` - Check git changes
+- `project-status` - Current state summary
+
+**Quality & Testing**
+- `test` - Run tests
+- `test-coverage` - With coverage report
+- `lint` - Check issues
+- `lint-fix` - Auto-fix safe issues
+- `format` - Format code
+
+**Development**
+- `dev` - Start all services
+- `code-search PATTERN="..."` - Fast search
+- `db-schema [TABLE=...]` - Database info
+- `clean` - Remove caches
+
+### Workflow Commands
+
+Run these inside Claude Code:
+
+- `/brainstorm` - Explore ideas
+- `/architect` - Plan implementation  
+- `/implement` - Write code
+- `/test` - Verify it works
+- `/review` - Get feedback
+- `/ship` - Commit changes
+- `/document` - Update docs
+- `/status` - Current state
+- `/tools` - Command reference
+
+## Customization
+
+### Add Project Commands
+
+Create new workflow commands:
+```bash
+echo "Your prompt here" > .claude/commands/my-command.md
 # Use as: /my-command
 ```
 
-#### Make Commands
-Add project-specific make targets to `make/project.mk`:
+Add Make targets to `make/project.mk`:
 ```makefile
-# Example: Development server
-.PHONY: dev-server
-dev-server: ## Start development server
-	uv run python manage.py runserver
-
-# Example: Database migrations
-.PHONY: migrate
-migrate: ## Run database migrations
-	uv run python manage.py migrate
+.PHONY: my-command
+my-command: ## Description
+	your command here
 ```
 
-The template's `make/project.mk` file is intentionally empty - it's where you add commands specific to your project without modifying the core template files.
+### Configure Hooks
 
-### Setting Up Hooks
-Configure in `.claude/settings.json`:
+Edit `.claude/settings.json`:
 ```json
 {
   "hooks": {
@@ -210,57 +186,74 @@ Configure in `.claude/settings.json`:
 }
 ```
 
-### Personal Configuration
-Your personal settings in `~/.claude/` (not tracked in git):
-- Custom hooks for your workflow
-- Personal command shortcuts
-- Notification preferences
+### Personal Settings
+
+Your `~/.claude/` directory (not in git) can contain:
+- Personal hooks
+- Custom commands  
+- User preferences
+
+## MCP Servers
+
+The template configures these MCP servers:
+
+- **perplexity** - Web search and research
+- **context7** - Documentation lookup
+- **playwright** - Browser automation
+- **repoprompt** - File operations
+
+Configure with: `make setup-mcp`
 
 ## Philosophy
 
-This template reflects my belief that **AI is most effective as a partner, not a replacement**. I'm trying to create what I think of as a "cognitive exoskeleton" that:
+### Principles
 
-- Might amplify human decision-making with AI-powered information gathering
-- Could help prevent common failure modes through systematic processes
-- Attempts to maintain quality through continuous verification
-- Explores scaling expertise through codified practices
+1. **AI as partner, not replacement** - Amplify human decisions
+2. **Modify over create** - Best code is no code
+3. **Reality over memory** - Always verify against actual state
+4. **Specialization over generalization** - Right tool for each phase
+5. **Continuous verification** - Catch errors early and often
 
-My goal isn't to make Claude autonomous, but to experiment with making the human-AI team more capable than either could be alone.
+### Decision Points
 
-## Inspirations & Attribution
+These require human approval:
+- Architectural plans from `/architect`
+- Refactoring proposals from `/refactor`  
+- Any file rewrites vs modifications
+- Creating new abstractions
 
-This workflow draws heavily from patterns I've observed and learned:
+### Anti-Patterns
 
-- **Process Management**: Using shoreman.sh from @mitsuhiko's minibb project
-- **Context Strategies**: Inspired by discussions in the Claude Discord community
-- **Make Patterns**: Learned from various open source projects
-- **Logging Approach**: Adapted from @mitsuhiko's development workflows
-- **Workflow Ideas**: Influenced by many developers sharing their AI-assisted development experiences
+The template actively prevents:
+- Creating `_v2.py` duplicate files
+- Using `pip` instead of `uv`
+- Hallucinating functions that don't exist
+- Over-engineering simple solutions
 
-I'm grateful to all the developers who share their workflows and tools openly. This template is my attempt to synthesize what I've learned and contribute back to the community.
+## Troubleshooting
 
-## Requirements
+**Claude gets confused about code**
+- Use smaller context: `make generate-context-python`
+- Delegate analysis: `make ai-analyze-project`
 
-- [Claude Code](https://claude.ai/code) CLI tool
-- Python with `uv` package manager
-- Node.js and npm
-- ripgrep (`rg`) for fast searching
-- Git for version control
+**Tests failing after changes**
+- Check hooks ran: `make format`
+- Review changes: `make review-diff`
 
-## Getting Help
+**Can't find functionality**
+- Search codebase: `make code-search PATTERN="..."`
+- Check structure: `repoprompt: get_file_tree`
 
-1. Check the built-in help: `/tools` command
-2. Review workflow examples in `.claude/commands/`
-3. See the Makefile for all available automation
+## Attribution
 
-Remember: The commands and workflows are guides, not rules. Adapt them to your needs and let the template evolve with your project.
+This template synthesizes patterns from:
+- shoreman.sh from @mitsuhiko's minibb
+- Context strategies from Claude Discord community
+- Logging approach from @mitsuhiko's workflows
+- Many developers sharing AI-assisted development experiences
 
-## Feedback Welcome
+## Further Reading
 
-This template is very much a work in progress. I'm learning as I go and would love to hear:
-- What patterns work in your workflow?
-- What doesn't work with this approach?
-- Ideas for improvement
-- Your own experiments with AI-assisted development
-
-Feel free to open issues or reach out with suggestions. We're all figuring this out together!
+- Run `make help` for all commands
+- Check `.claude/commands/` for workflow examples
+- See `CLAUDE.md` for collaboration principles

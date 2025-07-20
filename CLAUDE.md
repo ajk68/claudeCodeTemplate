@@ -65,7 +65,6 @@ These require my explicit approval:
 - `/review` - Consultative peer review and analysis
 - `/status` - Morning orientation without context pollution
 - `/ship` - Finalize and commit changes
-- `/fix` - Emergency repairs
 - `/document` - Update docs to reflect reality
 - `/tools` - Available tools reference
 
