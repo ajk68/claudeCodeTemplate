@@ -227,6 +227,13 @@ def main():
         else:
             setup_success = None  # Skipped
 
+        # Remove bootstrap.py from the new project
+        bootstrap_file = project_dir / "bootstrap.py"
+        if bootstrap_file.exists():
+            print_step("Cleaning up bootstrap file")
+            bootstrap_file.unlink()
+            print_success("Bootstrap script removed (no longer needed)")
+
         # Success message
         print(f"\n{Colors.GREEN}{'=' * 60}{Colors.END}")
         print(

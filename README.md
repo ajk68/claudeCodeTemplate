@@ -12,6 +12,7 @@ This template is my personal experiment in AI-assisted development, heavily insp
 - Process management patterns from @mitsuhiko's minibb
 - Context management strategies shared in the Claude community
 - Workflow automation ideas from various open source projects
+- Lessons learned from debugging AI failure modes
 
 I'm continuously learning and iterating on these patterns. What works for me might not work for you - please adapt freely!
 
@@ -33,7 +34,8 @@ This will:
 2. Remove template git history
 3. Initialize fresh git repository
 4. Run setup to configure your environment
-5. Your project is ready to go!
+5. Clean up the bootstrap script (no longer needed)
+6. Your project is ready to go!
 
 ### Start Development
 
@@ -47,13 +49,70 @@ claude              # Start Claude Code
 
 ## 🎯 Why I Created This Template
 
-**What I noticed**: When working with AI assistants on larger codebases, I found they would often get lost, suggest functions that don't exist, or compound errors over time.
+When working with AI assistants on larger codebases, I noticed they would often get lost, suggest functions that don't exist, or compound errors over time. This template is my attempt to create a systematic approach to human-AI collaboration that prevents these failure modes.
 
-**What I'm trying**: This template experiments with:
-- **Context Management** - Attempting to keep Claude focused through tiered context generation
-- **Reality Grounding** - Testing multiple verification layers to reduce hallucination
-- **Quality Feedback** - Exploring automated checks to catch issues early
-- **Workflow Specialization** - Experimenting with purpose-built commands for different tasks
+## 🎯 Goals of This Claude Code Setup
+
+### 1. Preserve Context Through Intelligent Delegation
+* **Problem**: Claude's context window fills up with irrelevant information, leading to confusion and mistakes
+* **Solution**: Main agent stays focused on the task while delegating information gathering to specialized agents
+* **Implementation**: Make commands that auto-select models based on content size, separate commands for different context scopes
+
+### 2. Ground AI in Reality (Anti-Hallucination)
+* **Problem**: AI makes assumptions, invents patterns, or creates unnecessary abstractions
+* **Solution**: Always check against real codebase, real docs, real database schemas
+* **Implementation**:
+  * repoprompt for surgical file reading
+  * Context7 for actual documentation
+  * `make db-schema` for real database state
+  * Perplexity for current best practices
+
+### 3. Enable Continuous Feedback Loops
+* **Problem**: AI goes down rabbit holes, creates bugs, or builds the wrong thing
+* **Solution**: Fresh eyes review at multiple stages, not just at the end
+* **Implementation**:
+  * **Unified Logging**: All services log to one place, AI can analyze with `make logs-analyze`
+  * **Consultative Reviews**: `/review` for peer-style feedback, not just pass/fail gates
+  * `make review-diff` before shipping
+  * `make analyze-files` during implementation
+  * `make lint/test` for immediate verification
+  * Hooks that block bad patterns in real-time
+
+### 4. Enforce Pragmatic Development Discipline
+* **Problem**: AI tendency to over-engineer, rewrite, or add unnecessary complexity
+* **Solution**: Systematic bias toward modification over creation, simplicity over cleverness
+* **Implementation**:
+  * Decision points requiring human approval
+  * "Best code is no code" philosophy baked into commands
+  * Smart blockers preventing version proliferation
+
+### 5. Create a Cognitive Exoskeleton for AI
+* **Problem**: Single AI agent trying to be architect, coder, reviewer, and debugger all at once
+* **Solution**: Specialized workflows that guide AI through each phase with appropriate tools
+* **Implementation**:
+  * `/architect` for planning (with full context)
+  * `/implement` for execution (with focused context)
+  * `/ship` for finalization (with quality gates)
+  * Each phase has its own toolkit and success criteria
+
+### 6. Maximize Human-AI Collaboration Efficiency
+* **Problem**: Humans repeating instructions, AI missing context, both wasting time
+* **Solution**: Codified workflows that embed best practices and lessons learned
+* **Implementation**:
+  * Slash commands that guide conversations
+  * Make commands that automate repetitive patterns
+  * Clear decision points for human input
+  * "Arthur is the most powerful tool" philosophy
+
+## 🚀 The Meta Goal
+
+Transform Claude from a "smart autocomplete" into a reliable engineering partner by:
+* Preventing known failure modes (context pollution, hallucination, over-engineering)
+* Amplifying strengths (pattern matching, code generation, analysis)
+* Creating reproducible, efficient workflows
+* Building trust through verification and feedback
+
+This isn't just about making Claude more productive - it's about making the human-AI team more effective than either could be alone.
 
 ## 📖 Documentation
 
@@ -85,6 +144,13 @@ make review-diff          # AI-powered change review
 - Test execution at checkpoints
 - Smart blockers for common mistakes
 - Reality checks against actual files/docs/schemas
+
+### Unified Logging & Debugging
+```bash
+make dev              # Start all services with centralized logging
+make logs-watch       # Watch all logs in real-time
+make logs-analyze     # AI analysis of log patterns and issues
+```
 
 ## 📁 What's Included
 

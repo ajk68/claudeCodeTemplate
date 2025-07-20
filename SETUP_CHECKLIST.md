@@ -21,6 +21,7 @@ This bootstrap script attempts to:
 - ✅ Update project name
 - ✅ Initialize fresh git repo
 - ✅ Run setup process
+- ✅ Clean up bootstrap.py (no longer needed)
 
 (I've found this approach helps avoid common setup mistakes, but your mileage may vary!)
 

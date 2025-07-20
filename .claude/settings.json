@@ -1,11 +1,55 @@
 {
   "hooks": {
-    "PostToolUse": [{
-      "matcher": "Write|Edit",
-      "hooks": [{
-        "type": "command",
-        "command": "make format"
-      }]
-    }]
+    "PreToolUse": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "uv run ~/.claude/hooks/command_logger.py"
+          },
+          {
+            "type": "command",
+            "command": "uv run ~/.claude/hooks/smart_blocker.py"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit|mcp__repoprompt__apply_edits",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "make format"
+          },
+          {
+            "type": "command",
+            "command": "uv run ~/.claude/hooks/python_formatter.py"
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "uv run ~/.claude/hooks/mac_notifier.py",
+            "timeout": 2
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "afplay /System/Library/Sounds/Hero.aiff"
+          }
+        ]
+      }
+    ]
   }
 }
