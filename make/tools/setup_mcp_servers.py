@@ -35,6 +35,27 @@ def find_repoprompt():
     return None
 
 
+def check_existing_servers():
+    """Check which MCP servers are already installed"""
+    try:
+        import subprocess
+
+        result = subprocess.run(
+            ["claude", "mcp", "list"], capture_output=True, text=True
+        )
+        if result.returncode == 0:
+            # Parse output like "perplexity: npx -y server-perplexity-ask"
+            servers = set()
+            for line in result.stdout.strip().split("\n"):
+                if ":" in line:
+                    server_name = line.split(":")[0].strip()
+                    servers.add(server_name.lower())
+            return servers
+        return set()
+    except Exception:
+        return set()
+
+
 def main():
     # Load .env file if it exists
     env_vars = {}
@@ -78,18 +99,46 @@ def main():
     if len(sys.argv) > 1 and sys.argv[1] == "--auto":
         import subprocess
 
+        # Check existing servers
+        existing_servers = check_existing_servers()
+        print("Checking for existing MCP servers...")
+        if existing_servers:
+            print(f"Found existing servers: {', '.join(sorted(existing_servers))}")
+
         success_count = 0
+        skipped_count = 0
+
         for cmd in COMMANDS:
+            # Extract server name from command
+            server_name = None
+            if "claude mcp add-json" in cmd:
+                # Extract name between add-json and the JSON
+                parts = cmd.split()
+                for i, part in enumerate(parts):
+                    if part == "add-json" and i + 1 < len(parts):
+                        server_name = parts[i + 1].lower()
+                        break
+            elif "claude mcp add" in cmd:
+                # For repoprompt: claude mcp add repoprompt ...
+                if "repoprompt" in cmd:
+                    server_name = "repoprompt"
+
+            # Skip if already exists
+            if server_name and server_name in existing_servers:
+                print(f"✓ Already installed: {server_name}")
+                skipped_count += 1
+                continue
+
             # Skip RepoPrompt if not found
             if "repoprompt" in cmd and not repoprompt_path:
-                print(f"Skipping: {cmd} (RepoPrompt not found)")
+                print("⚠️  Skipping RepoPrompt (not found)")
                 continue
 
             # Substitute environment variables
             for key, value in env_vars.items():
                 cmd = cmd.replace(f"${{{key}}}", value)
 
-            print(f"Executing: {cmd}")
+            print(f"Installing: {server_name or 'unknown'}")
             try:
                 result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
                 if result.returncode == 0:
@@ -100,10 +149,14 @@ def main():
             except Exception as e:
                 print(f"✗ Error: {e}")
 
-        if success_count > 0:
-            print(
-                f"\n✅ Added {success_count} MCP servers. Restart Claude Code to load them."
-            )
+        if success_count > 0 or skipped_count > 0:
+            print("\n✅ Summary:")
+            if success_count > 0:
+                print(f"   - Added {success_count} new MCP servers")
+            if skipped_count > 0:
+                print(f"   - Skipped {skipped_count} already installed servers")
+            if success_count > 0:
+                print("   - Restart Claude Code to load the new servers")
         else:
             print("\n❌ No MCP servers were added. Check the errors above.")
     else:
