@@ -1,0 +1,205 @@
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+*.egg-info/
+dist/
+build/
+*.egg
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+.pytype/
+.ruff_cache/
+.hypothesis/
+
+# Virtual environments
+.venv/
+.virtualenv/
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/*
+.ipynb_checkpoints
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+.project
+.pydevproject
+
+# Data and cache files
+*.pkl
+*.pickle
+*.cache
+*.h5
+*.hdf5
+*.parquet
+*.feather
+data/
+
+# Output files
+*.csv
+*.json
+*.html
+*.png
+*.jpg
+*.jpeg
+*.pdf
+*.svg
+
+# Logs
+*.log
+logs/
+*.log.*
+log/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+.~*
+
+# UV/pip
+uv.lock
+.uv/
+
+# Keep important files
+!pyproject.toml
+!README.md
+!CLAUDE.md
+!RESEARCH_INSIGHTS.md
+!RESEARCH OBJECTIVES.md
+!requirements*.txt
+
+# Keep important JSON configs (but not data)
+!*config.json
+!*settings.json
+
+# OS files
+Thumbs.db
+.DS_Store
+._.DS_Store
+desktop.ini
+
+# Backup files
+*.backup
+*.old
+
+# Archive files
+*.zip
+*.tar
+*.gz
+*.rar
+*.7z
+
+# Model files
+*.onnx
+*.pt
+*.pth
+*.safetensors
+*.ckpt
+
+# Temporary analysis files
+test_*.py
+debug_*.py
+check_*.py
+verify_*.py
+analyze_*.py
+*_test.py
+*_debug.py
+
+# Keep test files in test directory
+!tests/test_*.py
+
+# Notebook outputs
+notebook_output.txt
+*_output.txt
+
+# Large data files
+master_dataset_cache*.pkl
+user_clustering_cache*.pkl
+*_cache.pkl
+*_cache_v*.pkl
+
+# Analysis outputs
+feature_importance_results.csv
+contextual_performance_baselines.csv
+cluster_assignments.csv
+cluster_summary.txt
+
+# Model outputs
+skier_cluster_model*.pkl
+skier_cluster_definitions*.json
+bucket_definitions.pkl
+
+# Temporary directories
+tmp/
+temp/
+.temp/
+.tmp/
+
+# Repomix
+repomix-output.xml
+
+# SpecStory
+.specstory/
+
+# Poetry
+poetry.lock
+dist/
+
+# Ruff
+.ruff_cache/
+
+# Coverage reports
+coverage.xml
+*.cover
+.coverage.*
+
+# Profiling
+*.prof
+*.lprof
+
+# Sphinx documentation
+docs/_build/
+docs/_static/
+docs/_templates/
+
+# no jupter notebooks, we use jupytext to create them from .py files
+*.ipynb
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+pnpm-lock.yaml

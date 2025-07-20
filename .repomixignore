@@ -1,0 +1,63 @@
+# Add patterns to ignore here, one per line
+# Example:
+# *.log
+# tmp/
+
+# Repomix output
+**/repomix*
+
+# Lockfiles (provide little value for analysis vs. package.json/pyproject.toml)
+**/package-lock.json
+**/yarn.lock
+**/pnpm-lock.yaml
+**/poetry.lock
+**/uv.lock
+
+# Minified or bundled assets (not human-readable)
+**/*.min.js
+**/*.min.css
+**/*.bundle.js
+
+# Test data and fixtures (not source code)
+**/testdata/**
+**/test_data/**
+**/tests/data/**
+**/fixtures/**
+
+# Non-essential JSON files (often data, not config)
+**/data/**/*.json
+**/*.geo.json
+
+# Images and vector graphics
+**/*.png
+**/*.jpg
+**/*.jpeg
+**/*.gif
+**/*.svg
+**/*.ico
+
+# Fonts
+**/*.woff
+**/*.woff2
+**/*.ttf
+**/*.eot
+
+# Optional: Ignore tests if you only want application logic.
+# Comment this out if you want the LLM to analyze your tests.
+**/test_*.py
+**/*.test.js
+**/*.spec.js
+**/*.test.ts
+**/*.spec.ts
+**/tests/**
+"**/__tests__/**"
+
+# Additional patterns
+**/*.log
+**/.env
+**/Cargo.lock
+**/node_modules
+**/target
+**/dist
+**/build
+**/output.txt
