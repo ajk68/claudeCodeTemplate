@@ -162,16 +162,88 @@ def setup_mcp_servers():
         print_error("MCP setup script not found")
 
 
+def get_project_info():
+    """Interactively collect project information"""
+    print_step("Project Configuration")
+
+    # Get current directory name as default project name
+    current_dir = Path.cwd().name
+
+    print("\nLet's configure your project:")
+
+    # Project name
+    project_name = input(f"Project name [{current_dir}]: ").strip() or current_dir
+
+    # Project description
+    description = input("Brief project description: ").strip()
+    if not description:
+        description = "A new project built with Claude Code Template"
+
+    # Author info
+    author_name = input("Your name: ").strip()
+    author_email = input("Your email: ").strip()
+
+    # Python version (with default)
+    python_version = input("Python version [3.12]: ").strip() or "3.12"
+
+    return {
+        "name": project_name,
+        "description": description,
+        "author_name": author_name,
+        "author_email": author_email,
+        "python_version": python_version,
+    }
+
+
+def update_pyproject_toml(project_info):
+    """Update pyproject.toml with project information"""
+    pyproject_path = Path("pyproject.toml")
+
+    if not pyproject_path.exists():
+        print_warning("pyproject.toml not found, skipping update")
+        return
+
+    try:
+        content = pyproject_path.read_text()
+
+        # Update project metadata
+        content = content.replace(
+            'name = "claude-dev-template"', f'name = "{project_info["name"]}"'
+        )
+        content = content.replace(
+            'description = "A template for AI-assisted development with Claude"',
+            f'description = "{project_info["description"]}"',
+        )
+
+        # Add author info if provided (insert after description line)
+        if project_info["author_name"] and project_info["author_email"]:
+            authors_line = f'authors = [{{name = "{project_info["author_name"]}", email = "{project_info["author_email"]}"}}]'
+            # Find the description line and add authors after it
+            lines = content.split("\n")
+            for i, line in enumerate(lines):
+                if line.startswith("description = "):
+                    lines.insert(i + 1, authors_line)
+                    content = "\n".join(lines)
+                    break
+
+        # Update Python version
+        content = content.replace(
+            'requires-python = ">=3.12"',
+            f'requires-python = ">={project_info["python_version"]}"',
+        )
+
+        pyproject_path.write_text(content)
+        print_success("Updated pyproject.toml with your project information")
+
+    except Exception as e:
+        print_error(f"Failed to update pyproject.toml: {e}")
+
+
 def personalize_project():
     """Guide user through personalizing the template"""
-    print_step("Personalizing your project")
+    print_step("Additional Configuration")
 
     files_to_update = {
-        "pyproject.toml": [
-            "Update project name",
-            "Update description",
-            "Add your project-specific dependencies",
-        ],
         "CLAUDE.md": [
             "Fill in the 'Project Specific Instructions' section",
             "Add your project overview",
@@ -183,7 +255,7 @@ def personalize_project():
         ],
     }
 
-    print("\nFiles to update:")
+    print("\nDon't forget to update these files:")
     for file, tasks in files_to_update.items():
         print(f"\n  {Colors.YELLOW}{file}{Colors.END}")
         for task in tasks:
@@ -248,6 +320,10 @@ def main():
         print_warning("\nSome prerequisites are missing. Please install them first.")
         if input("\nContinue anyway? (y/N): ").lower() != "y":
             sys.exit(1)
+
+    # Get project information interactively
+    project_info = get_project_info()
+    update_pyproject_toml(project_info)
 
     setup_environment()
     install_dependencies()

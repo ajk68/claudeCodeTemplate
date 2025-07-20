@@ -8,32 +8,53 @@ A template for structured AI-assisted development with Claude. It helps prevent 
 # Create new project from template
 curl -sSL https://raw.githubusercontent.com/ajk68/claudeCodeTemplate/main/bootstrap.py | python3 - my-project
 cd my-project
-claude code
+claude
 ```
 
 That's it. The bootstrap script handles everything.
 
-## What This Does
+## What Problems This Solves
 
-- **Context Management** - Keeps Claude focused by delegating analysis to other models
-- **Reality Checks** - Prevents hallucination by verifying against actual files/docs/schemas  
-- **Quality Gates** - Automated linting, testing, and review at key points
-- **Workflow Commands** - Specialized prompts for planning, coding, and shipping
-- **Unified Logging** - All services log to one place for easier debugging
+1. **Claude gets confused in large codebases** → Smart context management keeps it focused
+2. **Claude makes things up** → Reality checks verify against actual files/docs
+3. **Bugs compound over time** → Catch problems early with unified logging and reviews
+4. **AI over-engineers solutions** → Blockers enforce simplicity, require human approval
+5. **Wrong tool for the job** → Specialized workflows for planning vs coding vs shipping
+6. **Repeated instructions waste time** → Pre-built commands with best practices
 
-## Key Commands
+## Key Features
 
+### Smart Context Management
 ```bash
-# Development workflows
-/brainstorm     # Explore ideas with real data
-/architect      # Create minimal technical plans
-/implement      # Execute changes efficiently
-/ship          # Commit with quality checks
+make generate-context-python    # Just Python files when that's all you need
+make ai-analyze-project         # Delegate analysis to avoid confusion
+```
 
-# Analysis tools
-make ai-analyze-project    # Analyze codebase
-make code-search          # Find patterns fast
-make logs-analyze         # Debug from logs
+### Reality Checks
+```bash
+repoprompt: read_file "api.py"  # Read actual files
+make db-schema                  # Check real database
+make code-search PATTERN="..."  # Find real patterns
+```
+
+### Early Problem Detection
+```bash
+make dev                        # All logs in one place
+make logs-analyze               # AI spots issues
+make review-diff                # Check before committing
+```
+
+### Enforced Simplicity
+- Blocks creating `file_v2.py` duplicates
+- Forces `uv` instead of `pip`
+- Requires approval for big changes
+
+### Specialized Workflows
+```bash
+/brainstorm     # Research and explore
+/architect      # Plan with full context
+/implement      # Code with focused context
+/ship          # Quality checks and commit
 ```
 
 ## Requirements

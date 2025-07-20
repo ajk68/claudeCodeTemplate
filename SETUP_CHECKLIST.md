@@ -4,15 +4,17 @@ Step-by-step instructions for setting up a new project from the Claude Code temp
 
 ## Prerequisites
 
-Before starting, install these tools:
+## Why These Prerequisites
 
-- [ ] Python 3.x
-- [ ] Git  
-- [ ] Make
-- [ ] [uv](https://github.com/astral-sh/uv) - Python package manager
-- [ ] Node.js and npm
-- [ ] [ripgrep](https://github.com/BurntSushi/ripgrep) (`rg`) - Fast search
-- [ ] [Claude Code](https://claude.ai/code) CLI
+Each tool solves a specific problem:
+
+- **Python 3.x** - Runs the automation scripts
+- **Git** - Version control for your code
+- **Make** - Runs all the helpful commands
+- **[uv](https://github.com/astral-sh/uv)** - Fast Python package management (replaces pip)
+- **Node.js and npm** - Required for MCP servers and some tools
+- **[ripgrep](https://github.com/BurntSushi/ripgrep)** - Lightning-fast code search
+- **[Claude Code](https://claude.ai/code)** - The AI coding assistant
 
 ## Create Your Project
 
@@ -121,3 +123,13 @@ claude              # Start Claude Code
 - Make sure uv is installed: `curl -LsSf https://astral.sh/uv/install.sh | sh`
 - Check Python version: `python3 --version` (needs 3.12+)
 
+## For Template Developers
+
+To modify the template itself (not create a project from it):
+
+```bash
+git clone https://github.com/ajk68/claudeCodeTemplate.git
+cd claudeCodeTemplate
+make install
+# Make changes, test, commit, push
+```
