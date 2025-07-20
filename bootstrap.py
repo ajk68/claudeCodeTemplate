@@ -7,7 +7,7 @@ It can be run directly from GitHub or downloaded and run locally.
 
 Usage:
     # Direct from GitHub:
-    curl -sSL https://raw.githubusercontent.com/YOUR_USERNAME/claudeCodeTemplate/main/bootstrap.py | python3 - my-project
+    curl -sSL https://raw.githubusercontent.com/ajk68/claudeCodeTemplate/main/bootstrap.py | python3 - my-project
 
     # Or download first:
     python3 bootstrap.py my-project

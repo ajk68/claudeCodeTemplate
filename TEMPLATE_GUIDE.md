@@ -50,7 +50,7 @@ An experimental template exploring how to create a more structured workflow betw
 ### Method 2: Manual Clone
 1. **Clone the template**:
    ```bash
-   git clone https://github.com/yourusername/claudeCodeTemplate my-project
+   git clone https://github.com/ajk68/claudeCodeTemplate my-project
    cd my-project
    ```
 2. **Run setup** (will detect and protect template):
