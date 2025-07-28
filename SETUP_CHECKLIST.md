@@ -93,8 +93,7 @@ make project-status # View project state
 
 In Claude Code:
 ```
-/status            # Check from within Claude
-/tools             # See available tools
+/project-status    # Check from within Claude
 ```
 
 ## Start Development
@@ -104,9 +103,9 @@ claude              # Start Claude Code
 
 # Try the workflow
 /brainstorm "your idea"
-/architect "feature name"
 /implement "the changes"
-/ship "commit message"
+/fix "debug issues"
+/project-status
 ```
 
 ## Troubleshooting

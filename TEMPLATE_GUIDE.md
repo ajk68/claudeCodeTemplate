@@ -19,7 +19,10 @@ This template creates a structured workflow between developers and Claude. It ad
 
 ```
 .claude/
+├── agents/          # Specialized AI agents for different tasks
 ├── commands/        # Workflow prompts (/brainstorm, /implement, etc.)
+│   ├── archive/     # Deprecated commands for reference
+│   └── meta/        # Meta-level commands
 ├── hooks/           # Automation scripts (formatting, blocking bad patterns)
 └── settings.json    # Project Claude configuration
 
@@ -61,9 +64,9 @@ Smart delegation automatically picks the right model:
 
 **Solution**: Multiple verification layers:
 
-- **repoprompt** - Read actual files from your project
-- **Context7** - Get real documentation for libraries
-- **Perplexity** - Search web for current best practices
+- **mcp__repoprompt__*** - Read actual files from your project
+- **mcp__context7__*** - Get real documentation for libraries
+- **mcp__perplexity__*** - Search web for current best practices
 - **make db-schema** - Check actual database structure
 - **make code-search** - Find real patterns in your code
 
@@ -106,8 +109,8 @@ Smart blockers prevent:
 - Rewriting without permission
 
 Human approval required for:
-- Architectural plans (`/architect`)
-- Major refactoring (`/refactor`)
+- Architectural plans (coordinator will pause for approval)
+- Major refactoring (system-analyst presents ROI)
 - Creating new abstractions
 
 Core principles enforced:
@@ -119,22 +122,29 @@ Core principles enforced:
 
 **Problem**: One AI trying to do everything leads to confusion.
 
-**Solution**: Specialized workflows for each phase:
+**Solution**: Specialized AI agents and focused commands:
 
-#### Planning Phase
-- `/brainstorm` - Explore with research and data
-- `/architect` - Create minimal technical plans
-- Gets: Full context, web search, pattern finding
+#### AI Agents (Automatic Specialization)
+- **coordinator** - Coordinates complex multi-step tasks
+- **system-analyst** - Understands codebase patterns and structure
+- **developer** - Executes code changes with precision
+- **analyst** - Plans implementation steps before coding
+- **searcher** - Searches and analyzes code intelligently
+- **documenter** - Manages project knowledge over time
+- **documentation-writer** - Maintains evergreen documentation
+- **tester** - Pragmatic testing focused on high-impact scenarios
+- **reviewer** - Peer review observations
+- **quality-gate** - Final deployment checks
 
-#### Execution Phase  
-- `/implement` - Execute with focused context
-- `/test` - Verify functionality
-- Gets: File reading, linting, testing tools
+#### Active Commands
+- `/brainstorm` - Explore problems using coordinator agent
+- `/implement` - Execute focused implementation tasks
+- `/project-status` - Get oriented without context pollution
+- `/fix` - Debug and resolve issues systematically
 
-#### Review Phase
-- `/review` - Consultative feedback
-- `/ship` - Final checks and commit
-- Gets: Diff review, git commands
+#### Archived Commands (moved to .claude/commands/archive/)
+- `/PRD`, `/architect`, `/test`, `/review`, `/ship`, `/document`, `/tools`, `/refactor`
+- These workflows are now handled by specialized agents
 
 ### 6. Make Collaboration Efficient
 
@@ -194,17 +204,41 @@ Clear human-AI roles:
 
 Run these inside Claude Code:
 
-- `/brainstorm` - Explore ideas
-- `/architect` - Plan implementation  
-- `/implement` - Write code
-- `/test` - Verify it works
-- `/review` - Get feedback
-- `/ship` - Commit changes
-- `/document` - Update docs
-- `/status` - Current state
-- `/tools` - Command reference
+**Active Commands**
+- `/brainstorm` - Explore ideas with AI coordinator
+- `/implement` - Execute implementation with smart agents
+- `/project-status` - Get current state without context pollution
+- `/fix` - Debug issues systematically
+
+**Agent Invocation**
+Agents work proactively based on your task, or invoke explicitly:
+```
+> Use the system-analyst to understand the caching system
+> Have the analyst create implementation steps for the new feature
+```
 
 ## Customization
+
+### Using the Install Script
+
+The `install.py` script allows selective installation of framework components:
+
+```bash
+# Install all components
+./install.py
+
+# Install specific components
+./install.py agents commands
+
+# Available components:
+# - agents: AI agent definitions
+# - commands: Workflow commands
+# - hooks: Automation scripts
+# - settings: Claude configuration
+# - makefile: Make commands
+# - docs: Documentation
+# - claudemd: CLAUDE.md file
+```
 
 ### Add Project Commands
 
@@ -249,10 +283,11 @@ Your `~/.claude/` directory (not in git) can contain:
 
 The template configures these MCP servers:
 
-- **perplexity** - Web search and research
-- **context7** - Documentation lookup
-- **playwright** - Browser automation
-- **repoprompt** - File operations
+- **repoprompt** - Surgical file operations and code exploration
+- **perplexity** - Web search and research (replaces Brave Search)
+- **context7** - Up-to-date library documentation
+- **snap-happy** - Screenshot tools
+- Additional servers can be configured based on project needs
 
 Configure with: `make setup-mcp`
 
@@ -269,8 +304,8 @@ Configure with: `make setup-mcp`
 ### Decision Points
 
 These require human approval:
-- Architectural plans from `/architect`
-- Refactoring proposals from `/refactor`  
+- Architectural plans from coordinator agent
+- Refactoring proposals from system-analyst agent
 - Any file rewrites vs modifications
 - Creating new abstractions
 
@@ -294,7 +329,7 @@ The template actively prevents:
 
 **Can't find functionality**
 - Search codebase: `make code-search PATTERN="..."`
-- Check structure: `repoprompt: get_file_tree`
+- Check structure: `mcp__repoprompt__get_file_tree`
 
 ## Attribution
 

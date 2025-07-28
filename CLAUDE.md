@@ -14,12 +14,12 @@
 
 This template solves six core problems in AI-assisted development:
 
-1. **You get confused with too much context** → We use smart context management and delegation
+1. **You get confused with too much context** → We use smart context management, delegation, and now sub-agents
 2. **You sometimes make things up** → We verify against real files and docs constantly
 3. **Bugs compound over time** → We catch problems early with logging and reviews
 4. **You tend to over-engineer** → We enforce simplicity with blockers and approval gates
-5. **One tool can't do everything** → We use specialized workflows for each phase
-6. **Repeated instructions waste time** → We've built best practices into commands
+5. **One tool can't do everything** → We use specialized workflows and sub-agents for each phase
+6. **Repeated instructions waste time** → We've built best practices into commands and sub-agents
 
 Understanding these problems helps you make better decisions. When you feel the urge to create complex abstractions, remember problem #4. When you're about to suggest a function, remember problem #2 - check if it actually exists first.
 
@@ -55,31 +55,53 @@ Before ANY change ask:
 2. Is this abstraction used 3+ times already?
 3. Am I adding beyond what was asked?
 
-### Decision Points
+### Decision Points (Now Enforced by Sub-Agents)
 These require my explicit approval:
-- Architectural plans (after `/architect`)
-- Refactoring plans (after `/refactor` proposal)
+- Architectural plans (coordinator will pause for approval)
+- Refactoring plans (system-analyst presents ROI for approval)
 - Any rewrite vs modify decision
 - Creating new abstractions
 
-## Workflow Commands
+## Sub-Agents vs Commands
 
-### Strategic/Planning Commands
-- `/brainstorm` - Co-founder dialogue about problems/opportunities
-- `/prd` - Product manager creating clear requirements (needs my approval)
-- `/architect` - Create minimal technical plan (needs my approval)
+### Sub-Agents for Execution
+Sub-agents are specialized AI workers that handle specific tasks in their own context:
 
-### Execution Commands  
-- `/implement` - Execute approved plan or simple changes
-- `/test` - Ensure code works without over-engineering
-- `/refactor` - Propose improvements with clear ROI
+- **coordinator** - Coordinates complex multi-step tasks (auto-invokes on complex features)
+- **system-analyst** - Codebase intelligence (invokes when understanding needed)
+- **developer** - Executes code changes with precision (auto-invokes on coding tasks)
+- **analyst** - Plans implementation steps before coding (auto-invokes on feature planning)
+- **searcher** - Searches and analyzes code intelligently (invokes for code discovery)
+- **documenter** - Manages project knowledge over time (invokes for documentation)
+- **documentation-writer** - Maintains evergreen documentation (invokes for doc updates)
+- **tester** - Pragmatic testing focused on high-impact scenarios (invokes for test needs)
+- **reviewer** - Peer review observations (invokes for code review)
+- **quality-gate** - Final deployment checks (invokes before shipping)
 
-### Support Commands
-- `/review` - Consultative peer review and analysis
+Sub-agents work proactively or can be invoked explicitly:
+```
+> Use the coordinator to plan the caching feature
+> Have the developer execute the approved plan
+```
+
+### Commands for Human Interaction
+Commands remain for workflows requiring dialogue and decisions:
+
+- `/brainstorm` - Co-founder dialogue using coordinator agent
+- `/implement` - Execute focused implementation tasks
 - `/status` - Morning orientation without context pollution
-- `/ship` - Finalize and commit changes
-- `/document` - Update docs to reflect reality
-- `/tools` - Available tools reference
+- `/fix` - Debug and resolve issues systematically
+
+Note: Archived commands moved to `.claude/commands/archive/` include:
+`/prd`, `/ship`, `/document`, `/tools`, `/architect`, `/refactor`, `/review`, `/test`
+
+## Agent Architecture
+
+See `docs/AGENT_ARCHITECTURE.md` for detailed information about:
+- How agents are selected and invoked
+- Agent capabilities and specializations
+- Creating custom agents for your project
+- Agent composition patterns
 
 ## Key Tools & Patterns
 
@@ -109,7 +131,7 @@ make logs-watch                                   # Watch combined logs real-tim
 **Search & Navigation**:
 ```bash
 make code-search PATTERN="pattern" [FILETYPE=py]   # Fast search
-make db-schema [TABLE=name]                        # Database structure
+make db-schema [TABLE=name]                        # Database structure (uses CARV_DB_URL from .env)
 make project-status                                # Current state
 ```
 
@@ -212,9 +234,9 @@ Example:
 ## When to Engage Arthur
 
 **Product intuition**: "Users might need X. What's your gut feeling?"  
-**At crossroads**: "I see options A, B, C. Given [context], I lean toward A..."  
-**Before exploring**: "To build X, should I investigate Y?"  
-**When stuck**: "Can't find Z. Where should I look?"  
+**At crossroads**: "The coordinator proposed A, B, C. Given [context], which aligns with your vision?"  
+**Before exploring**: "To build X, should the developer investigate Y?"  
+**When stuck**: "The system-analyst can't find Z. Where should it look?"  
 **When I'm sloppy**: Call me out - demand specificity
 
 ## Arthur's Superpowers
@@ -226,6 +248,7 @@ Example:
 
 ## Remember
 
+- Sub-agents preserve main context - use them liberally
 - Tap my product intuition early and often
 - If I'm vague, demand clarity - test my assumptions
 - My strength: knowing WHAT to build (from intuition + experience)
@@ -235,6 +258,8 @@ Example:
 ## Continuous Improvement
 
 - When patterns fail repeatedly, add the pattern to docs/meta/failed_patterns.md
-- When patterns are successful, add to docs/meta/success_patterns.md 
+- When patterns are successful, add to docs/meta/success_patterns.md
+- Customize sub-agents based on what works - they're in `.claude/agents/`
+- Add new sub-agents for recurring specialized tasks
 
 This document evolves through practice, not theory.

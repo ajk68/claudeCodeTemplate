@@ -6,13 +6,13 @@ Export recent Claude chat conversations for analysis using the tools/claude_chat
 
 1. **Run discovery to see projects** (I'll show 3 most recent first)
    ```bash
-   uv run python claude_chat_analyzer.py
+   uv run python make/tools/claude_chat_analyzer.py
    ```
 
 2. **Export with proper formatting** (use `--projects=` with equals sign):
    ```bash
    # IMPORTANT: Use --projects= (with equals) for complex project names
-   uv run python tools/claude_chat_analyzer.py --projects="-Users-arthur-code-carv-ai-coach-research" --max-age="2d"
+   uv run python make/tools/claude_chat_analyzer.py --projects="[PROJECT-NAME]" --max-age="2d"
    ```
 
 ## Process
@@ -33,23 +33,23 @@ Export recent Claude chat conversations for analysis using the tools/claude_chat
    ```bash
    # For projects with special characters (dashes, spaces, etc.)
    # USE: --projects="PROJECT_NAME" (with equals sign)
-   uv run python tools/claude_chat_analyzer.py --projects="-Users-arthur-code-carv-ai-coach-research" --max-age="2d"
+   uv run python make/tools/claude_chat_analyzer.py --projects="[PROJECT-NAME]" --max-age="2d"
    
    # For simple project names
    # CAN USE: --projects "PROJECT_NAME" (space separated)
-   uv run python claude_chat_analyzer.py --projects "simple-name" --max-age "2d"
+   uv run python make/tools/claude_chat_analyzer.py --projects "[SIMPLE-NAME]" --max-age "2d"
    ```
    
    More examples:
    ```bash
    # Export last 2 days from current project (complex name)
-   uv run python tools/claude_chat_analyzer.py --projects="-Users-arthur-code-carv-ai-coach-research" --max-age="2d"
+   uv run python make/tools/claude_chat_analyzer.py --projects="-Users-arthur-code-carv-ai-coach-research" --max-age="2d"
    
    # Export last week from multiple projects
-   uv run python claude_chat_analyzer.py --projects="ai-coach-research,ski-analytics" --max-age="1w"
+   uv run python make/tools/claude_chat_analyzer.py --projects="ai-coach-research,ski-analytics" --max-age="1w"
    
    # Export last 6 hours for quick review
-   uv run python claude_chat_analyzer.py --projects="-Users-arthur-code-carv-ai-coach-research" --max-age="6h"
+   uv run python make/tools/claude_chat_analyzer.py --projects="-Users-arthur-code-carv-ai-coach-research" --max-age="6h"
    ```
 
 4. **Output location**
@@ -104,19 +104,19 @@ Analyze the attached export to document:
 ### Recent Debugging Session
 Export the last few hours to review problem-solving approaches:
 ```bash
-uv run python claude_chat_analyzer.py --projects "ai-coach-research" --max-age 4h
+uv run python make/tools/claude_chat_analyzer.py --projects "ai-coach-research" --max-age 4h
 ```
 
 ### Weekly Progress Review
 Export a week's worth of conversations:
 ```bash
-uv run python claude_chat_analyzer.py --projects "ai-coach-research" --max-age 1w
+uv run python make/tools/claude_chat_analyzer.py --projects "ai-coach-research" --max-age 1w
 ```
 
 ### Multi-Project Analysis
 Compare work across projects:
 ```bash
-uv run python claude_chat_analyzer.py --projects "project1,project2,project3" --max-age 3d
+uv run python make/tools/claude_chat_analyzer.py --projects "project1,project2,project3" --max-age 3d
 ```
 
 ## Next Steps

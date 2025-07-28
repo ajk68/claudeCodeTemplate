@@ -32,9 +32,9 @@ make ai-analyze-project         # Delegate analysis to avoid confusion
 
 ### Reality Checks
 ```bash
-repoprompt: read_file "api.py"  # Read actual files
-make db-schema                  # Check real database
-make code-search PATTERN="..."  # Find real patterns
+mcp__repoprompt__read_file "api.py"  # Read actual files
+make db-schema                       # Check real database
+make code-search PATTERN="..."       # Find real patterns
 ```
 
 ### Early Problem Detection
@@ -49,13 +49,25 @@ make review-diff                # Check before committing
 - Forces `uv` instead of `pip`
 - Requires approval for big changes
 
-### Specialized Workflows
+### AI-Powered Agents
 ```bash
-/brainstorm     # Research and explore
-/architect      # Plan with full context
-/implement      # Code with focused context
-/ship          # Quality checks and commit
+/brainstorm      # Explore problems with AI coordinator
+/implement       # Execute focused implementation tasks
+/project-status  # Get oriented without context pollution
+/fix             # Debug and resolve issues systematically
 ```
+
+The template now includes a comprehensive AI agent system with 10 specialized agents:
+- **coordinator** - Coordinates complex multi-step tasks
+- **system-analyst** - Codebase analysis and pattern detection
+- **developer** - Executes code changes with precision
+- **analyst** - Strategic planning and PRD creation
+- **searcher** - Intelligent code discovery and analysis
+- **documenter** - Maintains project institutional memory
+- **documentation-writer** - Evergreen documentation maintenance
+- **tester** - Pragmatic high-impact testing
+- **reviewer** - Peer review observations
+- **quality-gate** - Final deployment checks
 
 ## Requirements
 
@@ -64,10 +76,22 @@ make review-diff                # Check before committing
 - [Claude Code](https://claude.ai/code) CLI
 - Git, Make, ripgrep
 
+## What's New
+
+### Recent Updates
+- **AI Agent System**: 10 specialized agents for different development phases
+- **Smart Tool Access**: Agents have appropriate read/write permissions
+- **MCP Integration**: Exact tool names for RepoPrompt, Context7, and Perplexity
+- **Selective Installation**: New `install.py` script for component-based setup
+- **Command Updates**: `/status` → `/project-status`, archived old commands
+
+See [CHANGES_SUMMARY.md](CHANGES_SUMMARY.md) for complete details.
+
 ## Documentation
 
 - [SETUP_CHECKLIST.md](SETUP_CHECKLIST.md) - Detailed setup instructions
 - [TEMPLATE_GUIDE.md](TEMPLATE_GUIDE.md) - Complete reference guide
+- [CHANGES_SUMMARY.md](CHANGES_SUMMARY.md) - Recent updates and migration notes
 - Run `make help` for all available commands
 
 ## Status
