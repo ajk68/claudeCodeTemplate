@@ -205,3 +205,8 @@ yarn-error.log*
 package-lock.json
 yarn.lock
 pnpm-lock.yaml
+.claude/projects/
+.claude/shell-snapshots/
+.claude/statsig/
+.claude/todos/
+.claude/logs/

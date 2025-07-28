@@ -1,346 +1,197 @@
 # Template Guide
 
-Complete reference for the Claude Code Development Template.
-
 ## Overview
 
-This template creates a structured workflow between developers and Claude. It addresses six core problems in AI-assisted development:
+This template creates a structured workflow using Claude's sub-agent system. Each agent specializes in one aspect of development, preventing context confusion and improving output quality.
 
-1. **Claude gets confused with too much context** - Smart tools keep it focused
-2. **Claude makes things up** - Reality checks against actual files and docs
-3. **Bugs compound over time** - Early problem detection through logging and reviews
-4. **AI over-engineers** - Enforced simplicity and human approval gates
-5. **Wrong tool for each job** - Specialized workflows for different phases
-6. **Repeated instructions** - Pre-built commands with best practices
+## Quick Reference
 
-## Architecture
+### Commands
+```bash
+/brainstorm "idea"     # Explore problems
+/implement "feature"   # Build features
+/fix "issue"          # Debug issues
+/project-status       # Check state
+```
 
-### Directory Structure
+### Key Make Commands
+```bash
+# Context generation (choose based on need)
+make generate-context-python    # Python only (~40K tokens)
+make generate-context-code      # Code without tests/docs (~70K)  
+make generate-context-full      # Everything (~145K)
+
+# Analysis
+make ai-analyze-project PROMPT="question" SCOPE=python
+make review-diff               # Review changes
+make logs-analyze             # Debug from logs
+
+# Development
+make dev                      # Start with logging
+make test                     # Run tests
+make code-search PATTERN="x"  # Fast search
+```
+
+## Sub-Agents
+
+Claude automatically selects the right agent, or you can invoke explicitly.
+
+### Core Agents
+
+**coordinator**  
+Orchestrates multi-step tasks. Knows when to involve other agents.
+```
+> "Build user authentication" 
+# Coordinator breaks this down and engages analyst, developer, tester
+```
+
+**developer**  
+Implements code changes. Has write access to files.
+- Uses repomix for surgical edits
+- Runs tests automatically
+- Follows existing patterns
+
+**tester**  
+Creates high-impact tests. Focuses on critical paths only.
+- Skips trivial tests
+- Tests user journeys
+- Deletes obsolete tests
+
+**reviewer**  
+Provides peer feedback. Read-only access.
+- Pattern consistency
+- Potential issues
+- Not a gatekeeper
+
+**quality-gate**  
+Final deployment checks. Pragmatic about shipping.
+- Security scan
+- Test verification  
+- Commit creation
+
+### Analysis Agents
+
+**system-analyst**  
+Deep codebase understanding.
+- Architecture analysis
+- Pattern detection
+- Context generation
+
+**searcher**  
+Code discovery specialist.
+- Pattern matching
+- External documentation
+- Cross-reference analysis
+
+**analyst**  
+Strategic planning.
+- PRDs
+- Implementation plans
+- Technical feasibility
+
+### Documentation Agents
+
+**context-keeper** (formerly documenter)  
+Maintains project memory.
+- Active task tracking
+- Weekly pattern distillation
+- Drift monitoring
+
+**documentation-writer**  
+Evergreen documentation.
+- Always current state
+- No temporal language
+- Holistic updates
+
+## Project Structure
 
 ```
 .claude/
-├── agents/          # Specialized AI agents for different tasks
-├── commands/        # Workflow prompts (/brainstorm, /implement, etc.)
-│   ├── archive/     # Deprecated commands for reference
-│   └── meta/        # Meta-level commands
-├── hooks/           # Automation scripts (formatting, blocking bad patterns)
-└── settings.json    # Project Claude configuration
+├── agents/          # Agent definitions
+├── commands/        # Workflow commands
+├── hooks/           # Automation (formatting, blocking)
+└── settings.json    # Configuration
 
 make/
-├── ai.mk           # AI delegation commands
+├── ai.mk           # AI commands
 ├── context.mk      # Context generation  
 ├── logging.mk      # Centralized logging
-├── quality.mk      # Testing and linting
-└── tools/          # Utilities (shoreman.sh process manager)
+└── tools/          # Utilities
 
 logs/
-├── frontend/       # Browser console logs
+├── frontend/       # Browser logs
 ├── backend/        # Server logs
 └── combined/       # Unified output
 ```
 
-## Core Concepts
+## Key Patterns
 
-### 1. Keep Claude Focused on the Task
-
-**Problem**: Claude gets confused when given too much information at once.
-
-**Solution**: Tiered context generation based on what you need:
-
+### Context Management
+Start small, expand as needed:
 ```bash
-make generate-context-python    # Python only (~40K tokens)
-make generate-context-small     # Compressed overview (~60K tokens)  
-make generate-context-code      # Code without docs/tests (~70K tokens)
-make generate-context-full      # Everything (~145K tokens)
+make generate-context-python  # Start here
+make generate-context-code    # If need more
+make generate-context-full    # Last resort
 ```
 
-Smart delegation automatically picks the right model:
-- Small files (<70KB) → Claude (fast and focused)
-- Large files (>70KB) → Gemini (handles big contexts)
-
-### 2. Stop Claude from Making Things Up
-
-**Problem**: Claude sometimes invents functions or patterns that don't exist.
-
-**Solution**: Multiple verification layers:
-
-- **mcp__repoprompt__*** - Read actual files from your project
-- **mcp__context7__*** - Get real documentation for libraries
-- **mcp__perplexity__*** - Search web for current best practices
-- **make db-schema** - Check actual database structure
-- **make code-search** - Find real patterns in your code
-
-Commands emphasize real data: "Load only what you need - Use repoprompt for surgical file access"
-
-### 3. Catch Problems Early
-
-**Problem**: Bugs compound over time if not caught quickly.
-
-**Solution**: Continuous feedback at multiple stages:
-
-Unified logging system:
+### Reality Checks
+Always verify against actual state:
 ```bash
-make dev           # Start with all logs in one place
-make logs-watch    # Real-time monitoring
-make logs-analyze  # AI analyzes patterns and issues
+make db-schema                    # Real database
+make code-search PATTERN="auth"   # Real patterns
+repomix: read_file "config.py"    # Real files
 ```
 
-Review tools:
+### Early Detection
+Unified logging catches issues fast:
 ```bash
-make review-diff    # Check changes before committing
-make analyze-files  # Get structural feedback
-/review            # Peer-style consultation
-```
-
-Automatic checks after every edit:
-- Python formatting with ruff
-- Command logging for audit trail
-- Smart notifications when input needed
-
-### 4. Keep Things Simple
-
-**Problem**: AI tends to over-engineer and create unnecessary complexity.
-
-**Solution**: Built-in constraints and approval gates:
-
-Smart blockers prevent:
-- Creating duplicate files (`file_v2.py`, `file_new.py`)
-- Using outdated commands (`pip` → `uv`)
-- Rewriting without permission
-
-Human approval required for:
-- Architectural plans (coordinator will pause for approval)
-- Major refactoring (system-analyst presents ROI)
-- Creating new abstractions
-
-Core principles enforced:
-- "No abstractions without 3+ existing uses"
-- "Best code is no code"
-- "Modify existing code over creating new"
-
-### 5. Right Tool for Each Job
-
-**Problem**: One AI trying to do everything leads to confusion.
-
-**Solution**: Specialized AI agents and focused commands:
-
-#### AI Agents (Automatic Specialization)
-- **coordinator** - Coordinates complex multi-step tasks
-- **system-analyst** - Understands codebase patterns and structure
-- **developer** - Executes code changes with precision
-- **analyst** - Plans implementation steps before coding
-- **searcher** - Searches and analyzes code intelligently
-- **documenter** - Manages project knowledge over time
-- **documentation-writer** - Maintains evergreen documentation
-- **tester** - Pragmatic testing focused on high-impact scenarios
-- **reviewer** - Peer review observations
-- **quality-gate** - Final deployment checks
-
-#### Active Commands
-- `/brainstorm` - Explore problems using coordinator agent
-- `/implement` - Execute focused implementation tasks
-- `/project-status` - Get oriented without context pollution
-- `/fix` - Debug and resolve issues systematically
-
-#### Archived Commands (moved to .claude/commands/archive/)
-- `/PRD`, `/architect`, `/test`, `/review`, `/ship`, `/document`, `/tools`, `/refactor`
-- These workflows are now handled by specialized agents
-
-### 6. Make Collaboration Efficient
-
-**Problem**: Repeating instructions wastes time and causes errors.
-
-**Solution**: Pre-built commands and automation:
-
-Each command includes:
-- Clear steps and best practices
-- Consistent workflow patterns
-- No need to repeat instructions
-
-Automation handles repetitive tasks:
-```bash
-make project-status      # Quick summary
-make ai-analyze-project  # Full analysis
-make test               # Run all tests
-```
-
-Clear human-AI roles:
-- You decide WHAT to build (product intuition)
-- Claude handles HOW to build it (implementation)
-- Defined checkpoints for your input
-
-## Command Reference
-
-### Make Commands
-
-**Context Generation**
-- `generate-context-full` - Complete codebase
-- `generate-context-code` - Code only
-- `generate-context-python` - Python files
-- `generate-context-small` - Compressed
-- `generate-context-from-files FILES="..."` - Specific files
-
-**AI Analysis**
-- `ai-query PROMPT="..." [FILE=...]` - Smart model selection
-- `ai-analyze-project PROMPT="..." SCOPE=...` - Full analysis
-- `analyze-file FILE="..."` - Single file review
-- `review-diff` - Check git changes
-- `project-status` - Current state summary
-
-**Quality & Testing**
-- `test` - Run tests
-- `test-coverage` - With coverage report
-- `lint` - Check issues
-- `lint-fix` - Auto-fix safe issues
-- `format` - Format code
-
-**Development**
-- `dev` - Start all services
-- `code-search PATTERN="..."` - Fast search
-- `db-schema [TABLE=...]` - Database info
-- `clean` - Remove caches
-
-### Workflow Commands
-
-Run these inside Claude Code:
-
-**Active Commands**
-- `/brainstorm` - Explore ideas with AI coordinator
-- `/implement` - Execute implementation with smart agents
-- `/project-status` - Get current state without context pollution
-- `/fix` - Debug issues systematically
-
-**Agent Invocation**
-Agents work proactively based on your task, or invoke explicitly:
-```
-> Use the system-analyst to understand the caching system
-> Have the analyst create implementation steps for the new feature
+make dev            # Everything logged
+make logs-watch     # Real-time monitoring
+make logs-analyze   # AI spots problems
 ```
 
 ## Customization
 
-### Using the Install Script
-
-The `install.py` script allows selective installation of framework components:
-
-```bash
-# Install all components
-./install.py
-
-# Install specific components
-./install.py agents commands
-
-# Available components:
-# - agents: AI agent definitions
-# - commands: Workflow commands
-# - hooks: Automation scripts
-# - settings: Claude configuration
-# - makefile: Make commands
-# - docs: Documentation
-# - claudemd: CLAUDE.md file
-```
-
 ### Add Project Commands
-
-Create new workflow commands:
 ```bash
-echo "Your prompt here" > .claude/commands/my-command.md
+echo "Your prompt" > .claude/commands/my-command.md
 # Use as: /my-command
 ```
 
-Add Make targets to `make/project.mk`:
+### Project Make Targets
+Add to `make/project.mk`:
 ```makefile
-.PHONY: my-command
-my-command: ## Description
-	your command here
+deploy: ## Deploy to production
+	./deploy.sh
 ```
 
 ### Configure Hooks
+Edit `.claude/settings.json` for automation.
 
-Edit `.claude/settings.json`:
-```json
-{
-  "hooks": {
-    "PostToolUse": [{
-      "matcher": "Write|Edit",
-      "hooks": [{
-        "type": "command",
-        "command": "make format"
-      }]
-    }]
-  }
-}
-```
+## Anti-Patterns Prevented
 
-### Personal Settings
-
-Your `~/.claude/` directory (not in git) can contain:
-- Personal hooks
-- Custom commands  
-- User preferences
-
-## MCP Servers
-
-The template configures these MCP servers:
-
-- **repoprompt** - Surgical file operations and code exploration
-- **perplexity** - Web search and research (replaces Brave Search)
-- **context7** - Up-to-date library documentation
-- **snap-happy** - Screenshot tools
-- Additional servers can be configured based on project needs
-
-Configure with: `make setup-mcp`
-
-## Philosophy
-
-### Principles
-
-1. **AI as partner, not replacement** - Amplify human decisions
-2. **Modify over create** - Best code is no code
-3. **Reality over memory** - Always verify against actual state
-4. **Specialization over generalization** - Right tool for each phase
-5. **Continuous verification** - Catch errors early and often
-
-### Decision Points
-
-These require human approval:
-- Architectural plans from coordinator agent
-- Refactoring proposals from system-analyst agent
-- Any file rewrites vs modifications
-- Creating new abstractions
-
-### Anti-Patterns
-
-The template actively prevents:
-- Creating `_v2.py` duplicate files
-- Using `pip` instead of `uv`
-- Hallucinating functions that don't exist
-- Over-engineering simple solutions
+- ❌ Creating `file_v2.py` duplicates
+- ❌ Using `pip` instead of `uv`  
+- ❌ Rewriting without permission
+- ❌ Abstractions without 3+ uses
+- ❌ Over-engineering simple tasks
 
 ## Troubleshooting
 
-**Claude gets confused about code**
-- Use smaller context: `make generate-context-python`
-- Delegate analysis: `make ai-analyze-project`
+**Context confusion**: Use smaller context or sub-agents
+**Test failures**: Check `make lint-fix` ran
+**Can't find code**: Use `make code-search`
+**Logs missing**: Ensure `make dev` is running
 
-**Tests failing after changes**
-- Check hooks ran: `make format`
-- Review changes: `make review-diff`
+## Installation Modes
 
-**Can't find functionality**
-- Search codebase: `make code-search PATTERN="..."`
-- Check structure: `mcp__repoprompt__get_file_tree`
+**Shared Mode**
+- Uses `~/.claude/` from dotfiles
+- Uses `~/ai_tools/` for make commands
+- Best for personal projects
 
-## Attribution
+**Complete Mode**
+- Everything in project directory
+- Portable and self-contained
+- Best for team projects
 
-This template synthesizes patterns from:
-- shoreman.sh from @mitsuhiko's minibb
-- Context strategies from Claude Discord community
-- Logging approach from @mitsuhiko's workflows
-- Many developers sharing AI-assisted development experiences
-
-## Further Reading
-
-- Run `make help` for all commands
-- Check `.claude/commands/` for workflow examples
-- See `CLAUDE.md` for collaboration principles

@@ -3,17 +3,21 @@
 Claude Code Template Bootstrap Script
 
 This script creates a new project from the Claude Code Template.
-It can be run directly from GitHub or downloaded and run locally.
+It supports two modes: shared (uses dotfiles) or complete (self-contained).
 
 Usage:
-    # Direct from GitHub:
+    # Direct from GitHub (will prompt for mode):
     curl -sSL https://raw.githubusercontent.com/ajk68/claudeCodeTemplate/main/bootstrap.py | python3 - my-project
 
-    # Or download first:
-    python3 bootstrap.py my-project
+    # With explicit mode:
+    python3 bootstrap.py my-project --mode shared
+    python3 bootstrap.py my-project --mode complete
 
-    # With options:
-    python3 bootstrap.py my-project --branch v2.0 --no-setup
+    # Upgrade shared to complete:
+    python3 bootstrap.py --upgrade-to-complete --local /path/to/template
+
+    # Other options:
+    python3 bootstrap.py my-project --branch v2.0 --no-setup --local /path/to/template
 """
 
 import subprocess
@@ -29,6 +33,7 @@ class Colors:
     YELLOW = "\033[93m"
     RED = "\033[91m"
     BLUE = "\033[94m"
+    CYAN = "\033[96m"
     END = "\033[0m"
 
 
@@ -106,12 +111,136 @@ def update_project_name(project_dir, new_name):
         print_error(f"Failed to update project name: {e}")
 
 
+def get_installation_mode():
+    """Interactively get installation mode from user"""
+    print(f"\n{Colors.CYAN}Choose installation mode:{Colors.END}\n")
+
+    print(f"{Colors.YELLOW}Shared:{Colors.END}")
+    print("  - Uses ~/.claude and ~/ai_tools from your dotfiles")
+    print("  - Best for: Personal projects, maintaining consistency")
+    print("  - Smaller project footprint")
+    print()
+
+    print(f"{Colors.YELLOW}Complete:{Colors.END}")
+    print("  - Everything included in the project directory")
+    print("  - Best for: Team projects, self-contained deployments")
+    print("  - Fully portable\n")
+
+    print("If unsure, choose 'complete' for a fully self-contained project.\n")
+
+    while True:
+        choice = input("Your choice [shared/complete]: ").lower().strip()
+        if choice in ["shared", "complete"]:
+            return choice
+        print(f"{Colors.RED}Please enter 'shared' or 'complete'{Colors.END}")
+
+
+def copy_shared_mode_files(src_dir, dest_dir):
+    """Copy only the essential files for shared mode"""
+    # Files to copy for shared mode
+    shared_files = [
+        "CLAUDE.md",
+        "Makefile",
+        ".gitignore",
+        ".repomixignore",
+        ".env-example",
+        "pyproject.toml",
+        "package.json",
+        "Procfile.example",
+        "repomix.config.json",
+        "README.md",
+        "SETUP_CHECKLIST.md",
+        "TEMPLATE_GUIDE.md",
+    ]
+
+    # Directories to copy (with their contents)
+    shared_dirs = ["docs", "backend", "frontend", "logs", "tests"]
+
+    # Copy individual files
+    for file in shared_files:
+        src_file = src_dir / file
+        if src_file.exists():
+            dest_file = dest_dir / file
+            shutil.copy2(src_file, dest_file)
+            print(f"  Copied: {file}")
+
+    # Copy directories
+    for dir_name in shared_dirs:
+        src_subdir = src_dir / dir_name
+        if src_subdir.exists():
+            dest_subdir = dest_dir / dir_name
+            shutil.copytree(src_subdir, dest_subdir, dirs_exist_ok=True)
+            print(f"  Copied: {dir_name}/")
+
+    print_success("Shared mode files copied")
+
+
+def upgrade_to_complete(template_dir):
+    """Upgrade a shared mode project to complete mode"""
+    print_step("Checking current installation mode")
+
+    # Check if already in complete mode
+    if Path(".claude").exists() or Path("make").exists():
+        print_warning("This project already has .claude or make directories.")
+        print("It appears to already be in complete mode.")
+        return False
+
+    print_success("This appears to be a shared mode project")
+
+    # Confirm upgrade
+    print(f"\n{Colors.CYAN}This will add:{Colors.END}")
+    print("  - .claude/ directory (agents, commands, hooks)")
+    print("  - make/ directory (build tools)")
+
+    if input("\nProceed with upgrade? [y/N]: ").lower() != "y":
+        print("Upgrade cancelled.")
+        return False
+
+    # Copy directories
+    print_step("Copying directories from template")
+
+    claude_src = template_dir / ".claude"
+    make_src = template_dir / "make"
+
+    if claude_src.exists():
+        shutil.copytree(claude_src, Path(".claude"), dirs_exist_ok=True)
+        print_success("Copied .claude directory")
+    else:
+        print_error(".claude directory not found in template")
+
+    if make_src.exists():
+        shutil.copytree(make_src, Path("make"), dirs_exist_ok=True)
+        print_success("Copied make directory")
+    else:
+        print_error("make directory not found in template")
+
+    print(f"\n{Colors.GREEN}✨ Upgrade complete!{Colors.END}")
+    print("Your project is now in complete mode.")
+    return True
+
+
 def main():
     # Parse arguments
     parser = argparse.ArgumentParser(
         description="Create a new project from the Claude Code Template"
     )
-    parser.add_argument("project_name", help="Name for your new project directory")
+
+    # Create a mutually exclusive group for project creation vs upgrade
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument(
+        "project_name", nargs="?", help="Name for your new project directory"
+    )
+    group.add_argument(
+        "--upgrade-to-complete",
+        action="store_true",
+        help="Upgrade existing shared mode project to complete mode",
+    )
+
+    parser.add_argument(
+        "--mode",
+        choices=["shared", "complete"],
+        help="Installation mode (if not specified, will prompt interactively)",
+    )
     parser.add_argument(
         "--repo",
         default="https://github.com/ajk68/claudeCodeTemplate.git",
@@ -129,11 +258,28 @@ def main():
 
     args = parser.parse_args()
 
+    # Handle upgrade mode
+    if args.upgrade_to_complete:
+        template_dir = Path(args.local) if args.local else Path(__file__).parent
+        if not template_dir.exists():
+            print_error(f"Template directory not found: {template_dir}")
+            sys.exit(1)
+
+        success = upgrade_to_complete(template_dir)
+        sys.exit(0 if success else 1)
+
     # Validate project name
     project_dir = Path(args.project_name)
     if project_dir.exists():
         print_error(f"Directory '{args.project_name}' already exists!")
         sys.exit(1)
+
+    # Get installation mode if not specified
+    mode = args.mode
+    if not mode:
+        mode = get_installation_mode()
+
+    print_success(f"Using {mode} mode installation")
 
     # Check prerequisites
     if not check_prerequisites():
@@ -141,7 +287,9 @@ def main():
         sys.exit(1)
 
     print(f"\n{Colors.BLUE}{'=' * 60}{Colors.END}")
-    print(f"{Colors.BLUE}🚀 Creating project from Claude Code Template{Colors.END}")
+    print(
+        f"{Colors.BLUE}🚀 Creating project from Claude Code Template ({mode} mode){Colors.END}"
+    )
     print(f"{Colors.BLUE}{'=' * 60}{Colors.END}")
 
     try:
@@ -153,32 +301,75 @@ def main():
                 print_error(f"Local template not found: {args.local}")
                 sys.exit(1)
 
-            # Copy template, excluding .git
-            shutil.copytree(
-                local_path,
-                project_dir,
-                ignore=shutil.ignore_patterns(
-                    ".git", "__pycache__", "*.pyc", ".DS_Store"
-                ),
-            )
-            print_success("Template copied")
+            # Create project directory first
+            project_dir.mkdir(exist_ok=True)
+
+            if mode == "shared":
+                # Copy only shared mode files
+                copy_shared_mode_files(local_path, project_dir)
+            else:
+                # Copy everything for complete mode
+                # Get the absolute path of the destination to avoid recursive copy
+                dest_name = project_dir.name
+                shutil.copytree(
+                    local_path,
+                    project_dir,
+                    dirs_exist_ok=True,
+                    ignore=shutil.ignore_patterns(
+                        ".git",
+                        "__pycache__",
+                        "*.pyc",
+                        ".DS_Store",
+                        dest_name,
+                        "test-*",
+                        "node_modules",
+                    ),
+                )
+                print_success("Template copied")
         else:
             # Clone from repository
-            print_step(f"Cloning template from {args.repo}")
-            if not run_command(
-                [
-                    "git",
-                    "clone",
-                    "--branch",
-                    args.branch,
-                    "--depth",
-                    "1",  # Shallow clone
-                    args.repo,
-                    args.project_name,
-                ],
-                "Template cloned",
-            ):
-                sys.exit(1)
+            if mode == "shared":
+                # For shared mode, clone to temp directory and copy selective files
+                print_step(f"Cloning template from {args.repo}")
+                import tempfile
+
+                with tempfile.TemporaryDirectory() as temp_dir:
+                    temp_path = Path(temp_dir) / "template"
+                    if not run_command(
+                        [
+                            "git",
+                            "clone",
+                            "--branch",
+                            args.branch,
+                            "--depth",
+                            "1",
+                            args.repo,
+                            str(temp_path),
+                        ],
+                        "Template cloned to temporary directory",
+                    ):
+                        sys.exit(1)
+
+                    # Create project directory and copy shared files
+                    project_dir.mkdir(exist_ok=True)
+                    copy_shared_mode_files(temp_path, project_dir)
+            else:
+                # For complete mode, clone directly
+                print_step(f"Cloning template from {args.repo}")
+                if not run_command(
+                    [
+                        "git",
+                        "clone",
+                        "--branch",
+                        args.branch,
+                        "--depth",
+                        "1",  # Shallow clone
+                        args.repo,
+                        args.project_name,
+                    ],
+                    "Template cloned",
+                ):
+                    sys.exit(1)
 
         # Remove .git directory
         git_dir = project_dir / ".git"
@@ -237,7 +428,7 @@ def main():
         # Success message
         print(f"\n{Colors.GREEN}{'=' * 60}{Colors.END}")
         print(
-            f"{Colors.GREEN}✨ Success! Your project '{args.project_name}' is ready!{Colors.END}"
+            f"{Colors.GREEN}✨ Success! Your {mode} mode project '{args.project_name}' is ready!{Colors.END}"
         )
         print(f"{Colors.GREEN}{'=' * 60}{Colors.END}")
 
@@ -253,6 +444,14 @@ def main():
             print("2. Edit .env and add your API keys")
             print("3. Run 'make help' to see available commands")
             print("4. Start Claude Code with 'claude'")
+
+        if mode == "shared":
+            print("\n🔗 Shared mode notes:")
+            print("  - Using ~/.claude for agents, commands, and hooks")
+            print("  - Using ~/ai_tools for make commands")
+            print(
+                "  - To upgrade to complete mode later: python3 bootstrap.py --upgrade-to-complete"
+            )
 
         print("\n💡 Tip: Check out the README.md for detailed documentation")
 
