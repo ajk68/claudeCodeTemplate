@@ -1,7 +1,8 @@
 ---
 name: coordinator
 description: |
-  Adaptive task coordinator that intelligently routes work and prevents scope creep.
+  description: |
+  MUST BE USED for planning, orchestrating, or coordinating complex features. Use PROACTIVELY for any multi-step task, feature request, or when breaking down large problems. Triggers on phrases like "plan the feature", "coordinate the work", "build a new system", "implement user notifications", or "let's start the project".
   
   Examples:
   - <example>

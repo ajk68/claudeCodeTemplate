@@ -1,5 +1,9 @@
 # Codebase context generation commands
 
+# Path detection for shared vs complete mode  
+MAKE_DIR := $(if $(wildcard make),make,$(HOME)/ai_tools/make)
+MAKE_PATTERN := $(if $(wildcard make),make/**,)
+
 .PHONY: generate-context-full generate-context-code generate-context-python generate-context-small generate-context-from-files claude-context
 
 # === Codebase Context Generation ===
@@ -45,7 +49,7 @@ claude-context: ## Generate Claude setup context for configuration/debugging
 	fi
 	@# Generate project-level Claude context  
 	@echo "📁 Creating project-level Claude context..."
-	@repomix --include ".claude/**,Makefile,make/**,CLAUDE.md" --top-files-len 15 -o /tmp/context-claude-project.txt .
+	@repomix --include ".claude/**,Makefile,$(MAKE_PATTERN),CLAUDE.md" --top-files-len 15 -o /tmp/context-claude-project.txt .
 	@# Combine both contexts into one file
 	@echo "🔗 Combining contexts..."
 	@echo "# User Level Claude Setup" > /tmp/context-claude-combined.txt

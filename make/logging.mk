@@ -1,6 +1,10 @@
 # Logging and Process Management Commands
 # Attribution: Inspired by mitsuhiko's workflows and many others in the community
 
+# Path detection for shared vs complete mode
+MAKE_TOOLS_DIR := $(if $(wildcard make/tools),make/tools,$(HOME)/ai_tools/make/tools)
+MAKE_DIR := $(if $(wildcard make),make,$(HOME)/ai_tools/make)
+
 .PHONY: dev logs-start logs-watch logs-analyze logs-clean logs-tail
 
 ## Run all development processes with centralized logging
@@ -11,7 +15,7 @@ dev:
 		cp Procfile.example Procfile; \
 		echo "📝 Please edit Procfile to match your project setup"; \
 	fi
-	@./make/tools/shoreman.sh
+	@$(MAKE_TOOLS_DIR)/shoreman.sh
 
 ## Start logging services in background
 logs-start:
@@ -33,9 +37,9 @@ logs-watch:
 logs-analyze:
 	@echo "🤖 Analyzing recent logs..."
 	@if [ -z "$(PROMPT)" ]; then \
-		tail -n 1000 logs/combined/*.log 2>/dev/null > /tmp/recent-logs.txt && $(MAKE) -f make/ai.mk ai-query FILE=/tmp/recent-logs.txt PROMPT="Analyze these logs for errors, warnings, and patterns. Summarize key issues."; \
+		tail -n 1000 logs/combined/*.log 2>/dev/null > /tmp/recent-logs.txt && $(MAKE) -f $(MAKE_DIR)/ai.mk ai-query FILE=/tmp/recent-logs.txt PROMPT="Analyze these logs for errors, warnings, and patterns. Summarize key issues."; \
 	else \
-		tail -n $(or $(LINES),1000) logs/combined/*.log 2>/dev/null > /tmp/recent-logs.txt && $(MAKE) -f make/ai.mk ai-query FILE=/tmp/recent-logs.txt PROMPT="$(PROMPT)"; \
+		tail -n $(or $(LINES),1000) logs/combined/*.log 2>/dev/null > /tmp/recent-logs.txt && $(MAKE) -f $(MAKE_DIR)/ai.mk ai-query FILE=/tmp/recent-logs.txt PROMPT="$(PROMPT)"; \
 	fi
 
 ## Clean all log files

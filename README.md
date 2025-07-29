@@ -4,9 +4,19 @@ A structured workflow for AI-assisted development that prevents common pitfalls 
 
 ## Quick Start
 
+**Option 1: Direct with mode specified**
 ```bash
-# Create new project
-curl -sSL https://raw.githubusercontent.com/ajk68/claudeCodeTemplate/main/bootstrap.py | python3 - my-project
+# Create new project (complete mode - fully self-contained)
+curl -sSL https://raw.githubusercontent.com/ajk68/claudeCodeTemplate/main/bootstrap.py | python3 - my-project --mode complete
+
+# Or use shared mode (uses ~/.claude and ~/ai_tools from dotfiles)
+curl -sSL https://raw.githubusercontent.com/ajk68/claudeCodeTemplate/main/bootstrap.py | python3 - my-project --mode shared
+```
+
+**Option 2: Download first for interactive mode selection**
+```bash
+curl -sSL https://raw.githubusercontent.com/ajk68/claudeCodeTemplate/main/bootstrap.py -o bootstrap.py
+python3 bootstrap.py my-project
 cd my-project
 claude
 ```

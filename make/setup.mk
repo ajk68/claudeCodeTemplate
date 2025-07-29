@@ -1,11 +1,14 @@
 # Development setup commands
 
+# Path detection for shared vs complete mode
+MAKE_TOOLS_DIR := $(if $(wildcard make/tools),make/tools,$(HOME)/ai_tools/make/tools)
+
 .PHONY: setup install install-python install-node sync sync-all setup-mcp
 
 # === Initial Setup ===
 setup: ## Run initial project setup wizard
 	@echo "🚀 Starting project setup wizard..."
-	@uv run python make/tools/setup_project.py
+	@uv run python $(MAKE_TOOLS_DIR)/setup_project.py
 
 # === Development Setup ===
 install: ## Install all project dependencies (Python + Node.js)
@@ -36,6 +39,6 @@ sync-all: ## Sync all dependencies (Python + Node.js)
 # === MCP Server Setup ===
 setup-mcp: ## Automatically configure MCP servers for Claude Code
 	@echo "🤖 Setting up MCP servers for Claude Code..."
-	@uv run python make/tools/setup_mcp_servers.py --auto
+	@uv run python $(MAKE_TOOLS_DIR)/setup_mcp_servers.py --auto
 	@echo ""
 	@echo "✅ MCP servers configured! Please restart Claude Code to load them."
