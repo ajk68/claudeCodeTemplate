@@ -8,9 +8,9 @@ db-schema: ## Check database schema
 		echo "❌ Error: .env file not found"; \
 		exit 1; \
 	fi; \
-	DB_URL=$$(grep CARV_DB_URL .env | cut -d '=' -f2- | tr -d '"'); \
+	DB_URL=$$(grep DB_URL .env | cut -d '=' -f2- | tr -d '"'); \
 	if [ -z "$$DB_URL" ]; then \
-		echo "❌ Error: CARV_DB_URL not found in .env"; \
+		echo "❌ Error: DB_URL not found in .env"; \
 		exit 1; \
 	fi; \
 	if [ -n "$(TABLE)" ]; then \

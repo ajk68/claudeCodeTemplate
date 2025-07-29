@@ -131,7 +131,7 @@ make logs-watch                                   # Watch combined logs real-tim
 **Search & Navigation**:
 ```bash
 make code-search PATTERN="pattern" [FILETYPE=py]   # Fast search
-make db-schema [TABLE=name]                        # Database structure (uses CARV_DB_URL from .env)
+make db-schema [TABLE=name]                        # Database structure (uses DB_URL from .env)
 make project-status                                # Current state
 ```
 
