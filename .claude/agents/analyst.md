@@ -45,7 +45,9 @@ All file paths are relative to this project directory.
 ## Common Tools
 
 For analysis and planning:
-- `make generate-context-small` - Quick project overview (60K tokens, compressed core code)
+- `make generate-context-small` - Quick project overview 
+- `make generate-context-code` - All code, no docs or tests
+- `make generate-context-full` Code and documentation
 - `make ai-analyze-project PROMPT="question" SCOPE=small` - Delegate analysis without context pollution
 - `mcp__repoprompt__get_code_structure` - Extract interfaces without implementation details
 - `mcp__repoprompt__search` - Find existing patterns and implementations

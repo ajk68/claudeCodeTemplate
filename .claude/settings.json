@@ -21,10 +21,6 @@
         "hooks": [
           {
             "type": "command",
-            "command": "make format"
-          },
-          {
-            "type": "command",
             "command": "uv run ~/.claude/hooks/python_formatter.py"
           }
         ]
