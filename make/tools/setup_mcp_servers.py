@@ -145,19 +145,28 @@ def main():
         list_servers()
         return
 
-    # Load .env file if it exists
+    # Load .env file if it exists (check multiple locations)
     env_vars = {}
-    env_file = Path(__file__).parent.parent.parent / ".env"
-    if env_file.exists():
-        try:
-            with open(env_file) as f:
-                for line in f:
-                    line = line.strip()
-                    if line and not line.startswith("#") and "=" in line:
-                        key, value = line.split("=", 1)
-                        env_vars[key.strip()] = value.strip().strip('"').strip("'")
-        except Exception as e:
-            print(f"Warning: Could not read .env file: {e}")
+    
+    # Check for .env files in order of preference
+    env_files = [
+        Path.cwd() / ".env",  # Current working directory (highest priority)
+        Path(__file__).parent.parent.parent / ".env",  # Script's parent directory
+    ]
+    
+    for env_file in env_files:
+        if env_file.exists():
+            try:
+                with open(env_file) as f:
+                    for line in f:
+                        line = line.strip()
+                        if line and not line.startswith("#") and "=" in line:
+                            key, value = line.split("=", 1)
+                            # Only update if key doesn't exist (first file wins)
+                            if key.strip() not in env_vars:
+                                env_vars[key.strip()] = value.strip().strip('"').strip("'")
+            except Exception as e:
+                print(f"Warning: Could not read .env file {env_file}: {e}")
 
     # Also check environment variables
     for key in ["PERPLEXITY_API_KEY", "ANTHROPIC_API_KEY", "OPENAI_API_KEY"]:
