@@ -17,9 +17,9 @@ This template creates a structured workflow using Claude's sub-agent system. Eac
 ### Key Make Commands
 ```bash
 # Context generation (choose based on need)
-make generate-context-python    # Python only (~40K tokens)
-make generate-context-code      # Code without tests/docs (~70K)  
-make generate-context-full      # Everything (~145K)
+make generate-context-python    # Python only 
+make generate-context-code      # Code without tests/docs  
+make generate-context-full      # Everything 
 
 # Analysis
 make ai-analyze-project PROMPT="question" SCOPE=python

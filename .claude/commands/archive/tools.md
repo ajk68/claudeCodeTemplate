@@ -6,10 +6,10 @@
 When you need broad codebase understanding:
 
 ```bash
-make generate-context-full      # Complete codebase (~145K tokens)
-make generate-context-code      # Code only, no docs/tests (~70K tokens)
-make generate-context-python    # Python files only (~40K tokens)
-make generate-context-small     # Compressed core code (~60K tokens)
+make generate-context-full      # Complete codebase 
+make generate-context-code      # Code only, no docs/tests 
+make generate-context-python    # Python files only 
+make generate-context-small     # Compressed core code 
 make generate-context-from-files FILES="file1.py file2.py"  # Specific files
 make claude-context            # Claude setup/config context
 ```

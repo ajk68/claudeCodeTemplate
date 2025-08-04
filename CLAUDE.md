@@ -109,10 +109,10 @@ See `docs/AGENT_ARCHITECTURE.md` for detailed information about:
 
 **Context Generation** (for broad understanding):
 ```bash
-make generate-context-python     # Python files only (~40K tokens)
-make generate-context-small      # Compressed overview (~60K tokens)
-make generate-context-code       # Code without docs/tests (~70K tokens)
-make generate-context-full       # Everything (~145K tokens)
+make generate-context-python     # Python files only 
+make generate-context-small      # Compressed overview 
+make generate-context-code       # Code without docs/tests 
+make generate-context-full       # Everything 
 make generate-context-from-files FILES="file1.py file2.py"
 ```
 

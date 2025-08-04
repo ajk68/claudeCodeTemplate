@@ -254,10 +254,10 @@ Agents should prefer make commands over manual operations:
 - `make ai-analyze-project` instead of manual analysis
 
 ### 2. Right-Size Context Generation
-- **Full** (~145K tokens): Complete analysis tasks
-- **Code** (~70K tokens): Implementation understanding
-- **Python** (~40K tokens): Language-specific patterns
-- **Small** (~60K tokens): Quick architectural overview
+- **Full** : Complete analysis tasks
+- **Code** : Implementation understanding
+- **Python** : Language-specific patterns
+- **Small** : Quick architectural overview
 - **From-files**: Focused analysis of specific files
 
 ### 3. Efficiency Patterns

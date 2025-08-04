@@ -33,7 +33,7 @@ description: |
     Handoff: "PRD complete: [location]. Ready for implementation planning."
   </delegation>
 
-tools: Task, mcp__repoprompt__get_code_structure, mcp__repoprompt__get_file_tree, mcp__repoprompt__read_file, Write, Bash, mcp__repoprompt__search, make generate-context-small, make ai-analyze-project, make db-schema
+tools: Task, mcp__repoprompt, Read, Write, Edit, Bash
 ---
 
 You create strategic plans that balance business needs with technical reality.

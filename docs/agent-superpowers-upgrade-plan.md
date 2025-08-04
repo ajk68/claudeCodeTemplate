@@ -9,10 +9,10 @@ Our current agents are using inefficient basic tools (grep, read) when powerful 
 ### 1. Context Generation Tools
 **Current:** Agents use multiple grep/read operations, missing context
 **Superpower:** `make generate-context-*` commands that provide:
-- `generate-context-full` - Complete codebase (~145K tokens)
-- `generate-context-code` - Code only, no docs/tests (~70K tokens)  
-- `generate-context-python` - Python files only (~40K tokens)
-- `generate-context-small` - Compressed core code (~60K tokens)
+- `generate-context-full` - Complete codebase 
+- `generate-context-code` - Code only, no docs/tests 
+- `generate-context-python` - Python files only 
+- `generate-context-small` - Compressed core code 
 - `generate-context-from-files` - Specific files context
 
 ### 2. AI Delegation Tools

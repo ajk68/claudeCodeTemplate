@@ -6,10 +6,10 @@ Quick reference for all tools available to Claude and sub-agents.
 
 ### Context Generation
 ```bash
-make generate-context-python      # Python only (~40K tokens)
-make generate-context-code        # Code only (~70K tokens)  
-make generate-context-full        # Everything (~145K tokens)
-make generate-context-small       # Compressed (~60K tokens)
+make generate-context-python      # Python only 
+make generate-context-code        # Code only  
+make generate-context-full        # Everything 
+make generate-context-small       # Compressed 
 make generate-context-from-files FILES="file1.py file2.py"
 ```
 
@@ -100,6 +100,7 @@ mcp__perplexity__perplexity_ask
 uv run python script.py    # Always use uv
 uv add package            # Install packages
 git operations            # Version control
+gh operations
 psql                     # Direct database access
 ```
 
